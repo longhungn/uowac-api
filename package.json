@@ -19,8 +19,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/ormconfig.ts",
-    "typeorm:migrate": "npm run typeorm migration:generate -- -n",
-    "typeorm:run": "npm run typeorm migration:run"
+    "typeorm:migrate": "npm run typeorm migration:generate -n",
+    "typeorm:run": "npm run typeorm migration:run",
+    "migrate:dev": "npm run typeorm migration:generate -- -c development -n"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
@@ -44,7 +45,7 @@
     "concurrently": "^4.1.0",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
-    "prettier": "^1.15.3",
+    "prettier": "^1.17.1",
     "supertest": "^3.4.1",
     "ts-jest": "24.0.2",
     "ts-node": "8.1.0",
