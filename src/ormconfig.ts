@@ -1,8 +1,7 @@
 require('dotenv').config();
 
-module.exports = [
-  {
-    name: 'development',
+export default {
+  development: {
     type: 'postgres',
     host: 'localhost',
     username: 'postgres',
@@ -20,8 +19,7 @@ module.exports = [
       migrationsDir: 'src/migrations',
     },
   },
-  {
-    name: 'production',
+  production: {
     type: 'postgres',
     url: process.env.DATABASE_URL,
     entities: [__dirname + '/**/*.{entity,repository}{.ts,.js}'],
@@ -35,8 +33,7 @@ module.exports = [
       migrationsDir: 'src/migrations',
     },
   },
-  {
-    name: 'staging',
+  staging: {
     type: 'postgres',
     host: 'localhost',
     username: 'postgres',
@@ -54,8 +51,7 @@ module.exports = [
       migrationsDir: 'src/migrations',
     },
   },
-  {
-    name: 'test',
+  test: {
     type: 'postgres',
     host: 'localhost',
     username: 'postgres',
@@ -74,4 +70,4 @@ module.exports = [
       migrationsDir: 'src/migrations',
     },
   },
-];
+};

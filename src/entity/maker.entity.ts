@@ -3,7 +3,7 @@ import { Sculpture } from './sculpture.entity';
 
 @Entity()
 export class SculptureMaker {
-  @PrimaryGeneratedColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

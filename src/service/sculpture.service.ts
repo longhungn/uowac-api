@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { SculptureShort } from 'src/interface/sculpture-short.interface';
-import { MissingRelationError } from 'src/error/missing-property.error';
-import { Sculpture } from 'src/entity/sculpture.entity';
+import { Sculpture } from '../entity/sculpture.entity';
+import { SculptureShort } from '../interface/sculpture-short.interface';
+import { MissingRelationError } from '../error/missing-property.error';
 
 @Injectable()
 export class SculptureService {
