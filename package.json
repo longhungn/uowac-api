@@ -22,7 +22,8 @@
     "typeorm:migrate": "npm run typeorm migration:generate -n",
     "typeorm:run": "npm run typeorm migration:run",
     "migrate:dev": "npm run typeorm migration:generate -- -c development -n",
-    "runmigrate:dev": "npm run typeorm migration:run -- -c development"
+    "runmigrate:dev": "npm run typeorm migration:run -- -c development",
+    "revertmigrate:dev": "npm run typeorm migration:revert -- -c development"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
@@ -30,6 +31,7 @@
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/typeorm": "^6.1.2",
+    "class-validator": "^0.10.0",
     "dotenv": "^8.0.0",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.12",
