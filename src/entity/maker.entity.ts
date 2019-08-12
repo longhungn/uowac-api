@@ -6,6 +6,9 @@ export class SculptureMaker {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ unique: true })
+  code: string; //human-readable code
+
   @Column()
   firstName: string;
 
