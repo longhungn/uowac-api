@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "ts-node -r tsconfig-paths/register src/main.ts",
+    "start": "npm run start:prod",
     "start:dev": "concurrently --handle-input \"wait-on dist/main.js && nodemon\" \"tsc -w -p tsconfig.build.json\" ",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rimraf dist && npm run build",
@@ -21,7 +21,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/ormconfig.ts",
     "typeorm:migrate": "npm run typeorm migration:generate -n",
     "typeorm:run": "npm run typeorm migration:run",
-    "migrate:dev": "npm run typeorm migration:generate -- -c development -n"
+    "migrate:dev": "npm run typeorm migration:generate -- -c development -n",
+    "runmigrate:dev": "npm run typeorm migration:run -- -c development"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
