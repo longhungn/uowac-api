@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { EntityManager, DeleteResult } from 'typeorm';
 import { Sculpture } from '../entity/sculpture.entity';
 import { SculptureShort } from '../interface/sculpture-short.interface';
 import { MissingRelationError } from '../error/missing-property.error';
+import { DtoCreateSculpture } from '../interface/create-sculpture.dto';
+import { UniqueConstraintError } from '../error/unique-constraint.error';
+import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
 
 @Injectable()
 export class SculptureService {

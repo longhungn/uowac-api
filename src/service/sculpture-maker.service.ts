@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { SculptureMaker } from 'src/entity/maker.entity';
-import { DtoCreateMaker } from 'src/interface/create-maker.dto';
-import { UniqueConstraintError } from 'src/error/unique-constraint.error';
-import { DtoUpdateMaker } from 'src/interface/update-maker.dto';
-import { EntityDoesNotExistError } from 'src/error/entity-not-exist.error';
-import { Sculpture } from 'src/entity/sculpture.entity';
-import { ForeignKeyError } from 'src/error/foreign-key.error';
+import { SculptureMaker } from '../entity/maker.entity';
+import { DtoCreateMaker } from '../interface/create-maker.dto';
+import { UniqueConstraintError } from '../error/unique-constraint.error';
+import { DtoUpdateMaker } from '../interface/update-maker.dto';
+import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
+import { Sculpture } from '../entity/sculpture.entity';
+import { ForeignKeyError } from '../error/foreign-key.error';
 
 @Injectable()
 export class SculptureMakerService {
