@@ -48,12 +48,46 @@ export class SculptureService {
     return shortened;
   }
 
-  async getSculptureById(accessionId: string): Promise<Sculpture> {
-    return await this.manager.findOneOrFail(Sculpture, {
+  async getSculptureById(accessionId: string): Promise<Sculpture | null> {
+    return await this.manager.findOne(Sculpture, {
       where: {
         accessionId,
       },
       relations: ['primaryMaker'],
     });
+  }
+
+  async createSculpture(data: DtoCreateSculpture): Promise<Sculpture> {
+    const existing = this.getSculptureById(data.accessionId);
+
+    if (existing != null) {
+      throw new UniqueConstraintError(Sculpture, 'accessionId');
+    } else {
+      const sculpture = this.manager.create(Sculpture, data);
+      return await this.manager.save(sculpture);
+    }
+  }
+
+  async updateSculpture(data: DtoCreateSculpture): Promise<Sculpture> {
+    const sculpture: Sculpture = await this.manager.preload(Sculpture, data);
+
+    if (!sculpture) {
+      throw new EntityDoesNotExistError(
+        'There is no sculpture with this accessionId: ' + data.accessionId
+      );
+    } else {
+      return await this.manager.save(sculpture);
+    }
+  }
+
+  async deleteSculpture(accessionId: string): Promise<Sculpture> {
+    const sculpture = await this.getSculptureById(accessionId);
+    if (!sculpture) {
+      throw new EntityDoesNotExistError(
+        'There is no sculpture with this accessionId: ' + accessionId
+      );
+    } else {
+      return await this.manager.remove(sculpture);
+    }
   }
 }
