@@ -9,28 +9,28 @@ export class Sculpture {
   @Column()
   name: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 7 }) //DECIMAL(10,7)
+  @Column({ type: 'decimal', precision: 10, scale: 7, nullable:true }) //DECIMAL(10,7)
   longitude: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 7 }) //DECIMAL(10,7)
+  @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true }) //DECIMAL(10,7)
   latitude: number;
 
   @ManyToOne(type => SculptureMaker, maker => maker.sculptures)
   @JoinColumn({ name: 'primaryMakerId' })
   primaryMaker: SculptureMaker;
-  @Column()
+  @Column({nullable: true})
   primaryMakerId: string;
 
-  @Column()
+  @Column({ nullable: true })
   productionDate: string;
 
-  @Column()
+  @Column({ nullable: true })
   material: string;
 
-  @Column()
+  @Column({ nullable: true })
   creditLine: string;
 
-  @Column()
+  @Column({ nullable: true })
   currentLocation: string;
 
   @Column({ nullable: true })
