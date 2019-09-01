@@ -1,1 +1,3 @@
  npm run typeorm migration:generate --  -c development -n MigrationName  //gen migration
+
+ npm run typeorm migration:create -- -n LoadData -d src/migrations //create empty migration
