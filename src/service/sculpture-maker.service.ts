@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { SculptureMaker } from '../entity/maker.entity';
@@ -15,6 +15,16 @@ export class SculptureMakerService {
 
   async getAllMakers(): Promise<SculptureMaker[]> {
     return await this.manager.find(SculptureMaker, {});
+  }
+
+  async getMakerById(id: string): Promise<SculptureMaker> {
+    const maker = await this.manager.findOne(SculptureMaker, { id });
+    if (!maker) {
+      throw new NotFoundException(
+        `Could not find specified sculpture maker with id "${id}"`
+      );
+    }
+    return maker;
   }
 
   async getMakerByCode(code: string): Promise<SculptureMaker> {
@@ -46,12 +56,12 @@ export class SculptureMakerService {
     }
   }
 
-  async deleteMaker(code: string) {
-    const maker = await this.getMakerByCode(code);
+  async deleteMaker(id: string) {
+    const maker = await this.getMakerById(id);
 
     if (!maker) {
       throw new EntityDoesNotExistError(
-        `Sculpture maker with code ${code} does not exists`
+        `Sculpture maker with id ${id} does not exists`
       );
     }
 

@@ -7,12 +7,14 @@ import { SculptureController } from './controller/sculpture.controller';
 import { SculptureService } from './service/sculpture.service';
 import { Sculpture } from './entity/sculpture.entity';
 import { SculptureMaker } from './entity/maker.entity';
+import { MakerController } from './controller/maker.controller';
+import { SculptureMakerService } from './service/sculpture-maker.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot(getOrmConfig(process.env.NODE_ENV)),
     // TypeOrmModule.forFeature([Sculpture, SculptureMaker]),
   ],
-  controllers: [AppController, SculptureController],
-  providers: [AppService, SculptureService],
+  controllers: [AppController, SculptureController, MakerController],
+  providers: [AppService, SculptureService, SculptureMakerService],
 })
 export class AppModule {}
