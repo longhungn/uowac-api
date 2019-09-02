@@ -4,11 +4,17 @@ import {
   IsOptional,
   IsInt,
   IsAlpha,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class DtoUpdateMaker {
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
   @IsAlphanumeric()
-  code: string;
+  @IsOptional()
+  code?: string;
 
   @IsOptional()
   @IsString()

@@ -44,14 +44,14 @@ export class SculptureMakerService {
   async updateMaker(data: DtoUpdateMaker): Promise<SculptureMaker> {
     try {
       let maker = await this.manager.findOneOrFail(SculptureMaker, {
-        code: data.code,
+        id: data.id,
       });
 
       maker = this.manager.merge(SculptureMaker, maker, data);
       return await this.manager.save(maker);
     } catch (err) {
       throw new EntityDoesNotExistError(
-        `Sculpture maker with code ${data.code} does not exists`
+        `Sculpture maker with id ${data.id} does not exists`
       );
     }
   }

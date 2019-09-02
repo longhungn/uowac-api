@@ -41,4 +41,9 @@ export class MakerController {
       await this.makerService.deleteMaker(id);
     }
   }
+
+  @Patch()
+  async updateMaker(@Body() dtoUpdateMaker: DtoUpdateMaker) {
+    return await this.makerService.updateMaker(dtoUpdateMaker);
+  }
 }
