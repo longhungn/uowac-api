@@ -1,10 +1,14 @@
 import {
   Controller,
   Get,
-  Query,
+  Param,
   NotFoundException,
   Post,
   Body,
+  Delete,
+  Query,
+  BadRequestException,
+  Patch,
 } from '@nestjs/common';
 import { SculptureService } from '../service/sculpture.service';
 import { DtoCreateSculpture } from '../interface/create-sculpture.dto';
@@ -15,23 +19,42 @@ export class SculptureController {
   constructor(private readonly sculptureService: SculptureService) {}
 
   @Get()
-  async getAll() {
+  async getAllSculptures() {
     return await this.sculptureService.allSculptures();
   }
 
-  @Get()
-  async getById(@Query('id') id: string) {
-    try {
-      return await this.sculptureService.getSculptureById(id);
-    } catch (err) {
-      throw new NotFoundException('Could not find specified sculpture');
+  @Get('/:id')
+  async getSculptureById(@Param('id') id: string): Promise<Sculpture> {
+    const sculpture = await this.sculptureService.getSculptureById(id);
+    if (!sculpture) {
+      throw new NotFoundException(
+        `Could not find specified sculpture with id "${id}"`
+      );
     }
+
+    return sculpture;
   }
 
   @Post()
-  async createController(
+  async createSculpture(
     @Body() dtoCreateSculpture: DtoCreateSculpture
   ): Promise<Sculpture> {
     return await this.sculptureService.createSculpture(dtoCreateSculpture);
+  }
+
+  @Delete()
+  async deleteSculpture(@Query('id') id: string): Promise<void> {
+    if (id) {
+      await this.sculptureService.deleteSculpture(id);
+    } else {
+      throw new BadRequestException('Please provide sculpture id for deletion');
+    }
+  }
+
+  @Patch()
+  async updateSculpture(
+    @Body() dtoUpdateSculpture: DtoCreateSculpture
+  ): Promise<Sculpture> {
+    return this.sculptureService.updateSculpture(dtoUpdateSculpture);
   }
 }

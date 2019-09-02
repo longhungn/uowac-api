@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { SculptureMakerService } from '../service/sculpture-maker.service';
 import { DtoCreateMaker } from '../interface/create-maker.dto';
@@ -39,6 +40,8 @@ export class MakerController {
   async deleteMaker(@Query('id') id: string) {
     if (id) {
       await this.makerService.deleteMaker(id);
+    } else {
+      throw new BadRequestException('Please provide maker id for deletion');
     }
   }
 
