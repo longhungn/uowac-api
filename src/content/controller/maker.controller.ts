@@ -3,12 +3,9 @@ import {
   Post,
   Body,
   Get,
-  Query,
-  NotFoundException,
   Param,
   Patch,
   Delete,
-  BadRequestException,
 } from '@nestjs/common';
 import { SculptureMakerService } from '../service/sculpture-maker.service';
 import { DtoCreateMaker } from '../interface/create-maker.dto';

@@ -6,8 +6,6 @@ import {
   Post,
   Body,
   Delete,
-  Query,
-  BadRequestException,
   Patch,
 } from '@nestjs/common';
 import { SculptureService } from '../service/sculpture.service';
