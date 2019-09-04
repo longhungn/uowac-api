@@ -36,13 +36,9 @@ export class MakerController {
     return await this.makerService.getAllMakers();
   }
 
-  @Delete()
-  async deleteMaker(@Query('id') id: string) {
-    if (id) {
-      await this.makerService.deleteMaker(id);
-    } else {
-      throw new BadRequestException('Please provide maker id for deletion');
-    }
+  @Delete('/:id')
+  async deleteMaker(@Param('id') id: string): Promise<void> {
+    await this.makerService.deleteMaker(id);
   }
 
   @Patch()

@@ -42,13 +42,9 @@ export class SculptureController {
     return await this.sculptureService.createSculpture(dtoCreateSculpture);
   }
 
-  @Delete()
-  async deleteSculpture(@Query('id') id: string): Promise<void> {
-    if (id) {
-      await this.sculptureService.deleteSculpture(id);
-    } else {
-      throw new BadRequestException('Please provide sculpture id for deletion');
-    }
+  @Delete('/:id')
+  async deleteSculpture(@Param('id') id: string): Promise<void> {
+    await this.sculptureService.deleteSculpture(id);
   }
 
   @Patch()

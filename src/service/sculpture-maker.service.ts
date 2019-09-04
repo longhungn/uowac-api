@@ -56,7 +56,7 @@ export class SculptureMakerService {
     }
   }
 
-  async deleteMaker(id: string) {
+  async deleteMaker(id: string): Promise<void> {
     const maker = await this.getMakerById(id);
 
     if (!maker) {
