@@ -58,9 +58,9 @@ export class SculptureService {
   }
 
   async createSculpture(data: DtoCreateSculpture): Promise<Sculpture> {
-    const existing = this.getSculptureById(data.accessionId);
+    const existing = await this.getSculptureById(data.accessionId);
 
-    if (existing != null) {
+    if (existing) {
       throw new UniqueConstraintError(Sculpture, 'accessionId');
     } else {
       const sculpture = this.manager.create(Sculpture, data);
@@ -80,14 +80,14 @@ export class SculptureService {
     }
   }
 
-  async deleteSculpture(accessionId: string): Promise<Sculpture> {
+  async deleteSculpture(accessionId: string): Promise<void> {
     const sculpture = await this.getSculptureById(accessionId);
     if (!sculpture) {
       throw new EntityDoesNotExistError(
         'There is no sculpture with this accessionId: ' + accessionId
       );
     } else {
-      return await this.manager.remove(sculpture);
+      await this.manager.remove(sculpture);
     }
   }
 }
