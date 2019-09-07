@@ -23,7 +23,10 @@ export class Sculpture {
   @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true }) //DECIMAL(10,7)
   latitude: number;
 
-  @ManyToOne(type => SculptureMaker, maker => maker.sculptures)
+  @ManyToOne(type => SculptureMaker, maker => maker.sculptures, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'primaryMakerId' })
   primaryMaker: SculptureMaker;
   @Column({ nullable: true })
