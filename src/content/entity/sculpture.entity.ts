@@ -1,5 +1,13 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { SculptureMaker } from './maker.entity';
+import { Picture } from './picture.entity';
 
 @Entity()
 export class Sculpture {
@@ -9,7 +17,7 @@ export class Sculpture {
   @Column()
   name: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 7, nullable:true }) //DECIMAL(10,7)
+  @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true }) //DECIMAL(10,7)
   longitude: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true }) //DECIMAL(10,7)
@@ -18,7 +26,7 @@ export class Sculpture {
   @ManyToOne(type => SculptureMaker, maker => maker.sculptures)
   @JoinColumn({ name: 'primaryMakerId' })
   primaryMaker: SculptureMaker;
-  @Column({nullable: true})
+  @Column({ nullable: true })
   primaryMakerId: string;
 
   @Column({ nullable: true })
@@ -38,4 +46,7 @@ export class Sculpture {
 
   @Column({ nullable: true })
   description: string; //optional introduction about sculpture
+
+  @OneToMany(type => Picture, picture => picture.sculpture)
+  pictures: Picture[];
 }
