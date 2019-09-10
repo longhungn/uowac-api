@@ -14,7 +14,7 @@ export class SculptureService {
 
   async allSculptures(): Promise<Sculpture[]> {
     return await this.manager.find(Sculpture, {
-      relations: ['primaryMaker'],
+      relations: ['primaryMaker', 'images'],
     });
   }
 
@@ -53,7 +53,7 @@ export class SculptureService {
       where: {
         accessionId,
       },
-      relations: ['primaryMaker'],
+      relations: ['primaryMaker', 'images'],
     });
   }
 

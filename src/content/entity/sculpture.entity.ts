@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { SculptureMaker } from './maker.entity';
-import { Picture } from './picture.entity';
+import { SculptureImage } from './image.entity';
 
 @Entity()
 export class Sculpture {
@@ -50,6 +50,6 @@ export class Sculpture {
   @Column({ nullable: true })
   description: string; //optional introduction about sculpture
 
-  @OneToMany(type => Picture, picture => picture.sculpture)
-  pictures: Picture[];
+  @OneToMany(type => SculptureImage, picture => picture.sculpture)
+  images: SculptureImage[];
 }
