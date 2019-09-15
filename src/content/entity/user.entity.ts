@@ -1,4 +1,5 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Comment } from '../../social/entity/comment.entity';
 
 @Entity()
 export class User {
@@ -31,4 +32,7 @@ export class User {
     nullable: true,
   })
   role: string[];
+
+  @OneToMany(type => Comment, comment => comment.user)
+  comments: Comment[];
 }

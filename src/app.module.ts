@@ -4,10 +4,12 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getOrmConfig } from './utils/getOrmConfig';
 import { ContentModule } from './content/content.module';
+import { SocialModule } from './social/social.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(getOrmConfig(process.env.NODE_ENV)),
     ContentModule,
+    SocialModule,
     // TypeOrmModule.forFeature([Sculpture, SculptureMaker]),
   ],
   controllers: [AppController],

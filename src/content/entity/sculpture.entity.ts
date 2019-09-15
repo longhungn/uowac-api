@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { SculptureMaker } from './maker.entity';
 import { SculptureImage } from './image.entity';
+import { Comment } from '../../social/entity/comment.entity';
 
 @Entity()
 export class Sculpture {
@@ -52,4 +53,7 @@ export class Sculpture {
 
   @OneToMany(type => SculptureImage, picture => picture.sculpture)
   images: SculptureImage[];
+
+  @OneToMany(type => Comment, comment => comment.sculpture)
+  comments: Comment[];
 }
