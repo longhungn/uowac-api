@@ -9,6 +9,7 @@ import {
 import { SculptureMaker } from './maker.entity';
 import { SculptureImage } from './image.entity';
 import { Comment } from '../../social/entity/comment.entity';
+import { Visit } from '../../social/entity/visit.entity';
 
 @Entity()
 export class Sculpture {
@@ -56,4 +57,7 @@ export class Sculpture {
 
   @OneToMany(type => Comment, comment => comment.sculpture)
   comments: Comment[];
+
+  @OneToMany(type => Visit, visit => visit.sculpture)
+  visits: Visit[];
 }

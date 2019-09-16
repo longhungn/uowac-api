@@ -1,5 +1,6 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { Comment } from '../../social/entity/comment.entity';
+import { Visit } from '../../social/entity/visit.entity';
 
 @Entity()
 export class User {
@@ -35,4 +36,7 @@ export class User {
 
   @OneToMany(type => Comment, comment => comment.user)
   comments: Comment[];
+
+  @OneToMany(type => Visit, visit => visit.user)
+  visits: Visit[];
 }
