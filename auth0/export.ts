@@ -5,8 +5,9 @@ import { config } from './config';
 console.log(config);
 
 dump({
-  output_folder: path.join(__dirname, 'tenant.yaml'),
+  output_folder: path.join(__dirname),
   config: config,
+  format: 'yaml',
 })
   .then(() => console.log('Dump successful'))
   .catch(err => {
