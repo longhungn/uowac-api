@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../content/entity/user.entity';
+import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 
 @Entity()

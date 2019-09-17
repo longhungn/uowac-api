@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { User } from '../../content/entity/user.entity';
+import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 import { DtoCreateVisit } from '../interface/create-visit.dto';
 import { Visit } from '../entity/visit.entity';

@@ -3,7 +3,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager, Timestamp } from 'typeorm';
 import { Comment } from '../entity/comment.entity';
 import { DtoCreateComment } from '../interface/create-comment.dto';
-import { User } from '../../content/entity/user.entity';
+import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 import { DtoUpdateComment } from '../interface/update-comment.dto';
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';

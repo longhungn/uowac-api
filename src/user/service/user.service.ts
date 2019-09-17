@@ -3,8 +3,8 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { User } from '../entity/user.entity';
 import { DtoCreateUser } from '../interface/create-user.dto';
-import { UniqueConstraintError } from '../error/unique-constraint.error';
-import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
+import { UniqueConstraintError } from '../../content/error/unique-constraint.error';
+import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
 
 @Injectable()
 export class UserService {
