@@ -1,0 +1,210 @@
+emailProvider: {}
+rules:
+  - name: Sync user data with database
+    script: ./rules/Sync user data with database.js
+    stage: login_success
+    enabled: true
+    order: 2
+pages: []
+resourceServers:
+  - name: uowac-api
+    identifier: "https://uowac-api.herokuapp.com"
+    allow_offline_access: true
+    enforce_policies: true
+    scopes:
+      - value: "create:user"
+        description: Create new user entry in database
+      - value: "update:user"
+        description: Update user entry in database
+    signing_alg: RS256
+    skip_consent_for_verifiable_first_party_clients: true
+    token_dialect: access_token_authz
+    token_lifetime: 86400
+    token_lifetime_for_web: 7200
+clients:
+  - name: Default App
+    callbacks: []
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: false
+    sso_disabled: false
+  - name: User sync
+    app_type: non_interactive
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+  - name: auth0-deploy-cli-extension
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+  - name: uowac-api (Test Application)
+    app_type: non_interactive
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+  - name: uowac-mobile
+    allowed_clients: []
+    app_type: spa
+    callbacks: []
+    client_aliases: []
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+    token_endpoint_auth_method: none
+databases:
+  - name: Username-Password-Authentication
+    strategy: auth0
+    enabled_clients:
+      - Default App
+      - uowac-mobile
+      - User sync
+      - auth0-deploy-cli-extension
+      - uowac-api (Test Application)
+    is_domain_connection: false
+    options:
+      mfa:
+        active: true
+        return_enroll_settings: true
+      passwordPolicy: good
+      strategy_version: 2
+      brute_force_protection: true
+    realms:
+      - Username-Password-Authentication
+  - name: test
+    strategy: auth0
+    enabled_clients: []
+    is_domain_connection: false
+    options:
+      mfa:
+        active: true
+        return_enroll_settings: true
+      passwordPolicy: good
+      disable_signup: false
+      requires_username: false
+      strategy_version: 2
+      brute_force_protection: true
+      enabledDatabaseCustomization: false
+      import_mode: false
+      password_no_personal_info:
+        enable: false
+      password_dictionary:
+        enable: false
+        dictionary: []
+      password_history:
+        enable: false
+        size: 5
+      password_complexity_options:
+        min_length: 1
+    realms:
+      - test
+connections:
+  - name: google-oauth2
+    strategy: google-oauth2
+    enabled_clients:
+      - Default App
+      - uowac-mobile
+      - User sync
+      - auth0-deploy-cli-extension
+      - uowac-api (Test Application)
+    is_domain_connection: false
+    options:
+      email: true
+      profile: true
+      scope:
+        - email
+        - profile
+tenant:
+  enabled_locales:
+    - en
+  flags:
+    disable_clickjack_protection_headers: false
+rulesConfigs:
+  - key: SYNC_USER_URL
+    value: ##SYNC_USER_URL##
+  - key: SYNC_USER_CLIENT_ID
+    value: ##SYNC_USER_CLIENT_ID##
+  - key: SYNC_USER_CLIENT_SECRET
+    value: ##SYNC_USER_CLIENT_SECRET##
+emailTemplates: []
+clientGrants:
+  - client_id: User sync
+    audience: "https://uowac-api.herokuapp.com"
+    scope:
+      - "create:user"
+      - "update:user"
+  - client_id: uowac-api (Test Application)
+    audience: "https://uowac-api.herokuapp.com"
+    scope: []
+guardianFactors:
+  - name: duo
+    enabled: false
+  - name: email
+    enabled: false
+  - name: otp
+    enabled: false
+  - name: push-notification
+    enabled: false
+  - name: sms
+    enabled: false
+guardianFactorProviders: []
+guardianFactorTemplates: []
+roles: []
+branding: {}
+prompts: {}
