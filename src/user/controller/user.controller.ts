@@ -7,14 +7,20 @@ import {
   Delete,
   Patch,
   NotFoundException,
+  Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { DtoCreateUser } from '../interface/create-user.dto';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
+import { AuthGuard } from '@nestjs/passport';
+import { ScopesGuard } from '../../auth/scopes.guard';
+import { Scopes } from '../../auth/scopes.decorator';
 
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
   @Get()
@@ -43,8 +49,10 @@ export class UserController {
   }
 
   @Post('sync')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('create:user')
   async syncUser(@Body() data: DtoCreateUser) {
-    let user;
+    let user: User;
     try {
       user = await this.userService.updateUser(data);
     } catch (err) {
@@ -55,6 +63,7 @@ export class UserController {
       }
     }
 
+    this.logger.log(`Synced user with id ${user.userId}`);
     return user;
   }
 }

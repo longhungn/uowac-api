@@ -16,6 +16,14 @@ resourceServers:
         description: Create new user entry in database
       - value: "update:user"
         description: Update user entry in database
+      - value: "create:sculpture"
+        description: Create sculpture in database
+      - value: "update:sculpture"
+        description: Update sculpture
+      - value: "delete:sculpture"
+        description: Delete sculpture from database
+      - value: "delete:all_comment"
+        description: "delete comments of any user"
     signing_alg: RS256
     skip_consent_for_verifiable_first_party_clients: true
     token_dialect: access_token_authz

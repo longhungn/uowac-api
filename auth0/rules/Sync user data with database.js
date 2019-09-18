@@ -10,7 +10,10 @@ function (user, context, callback) {
   const url = configuration.SYNC_USER_URL;
 	const clientId = configuration.SYNC_USER_CLIENT_ID;
   const clientSecret = configuration.SYNC_USER_CLIENT_SECRET;
-  
+
+  const assignedRoles = (context.authorization || {}).roles;
+  const provider = user.user_id.split('|')[0];
+
   request.post({
   	url: 'https://uowac-dev.au.auth0.com/oauth/token',
     json: {
@@ -32,16 +35,32 @@ function (user, context, callback) {
   });
   
   function syncUser(accessToken, user) {
-  	request.get({
+  	request.post({
     	url: url,
       auth: {
       	'bearer': accessToken
+      },
+      form: {
+        userId: user.user_id,
+        nickname: user.nickname,
+        name: user.name,
+        picture: user.picture,
+        role: assignedRoles,
+        email: user.email,
+        givenName: user.given_name,
+        familyName: user.family_name,
+        gender: user.gender
       }
     }, function(err, response, body) {
     	if (err) return callback(err);
-      if (response.statusCode !== 200) {
+      if (response.statusCode !== 201) {
+        console.log(response);
         return callback(new UnauthorizedError('Service not available'));
       }
+
+      user.app_metadata = user.app_metadata || {};
+      user.app_metadata.isCreated = true;
+
       return callback(err, user, context);
     });
   }
