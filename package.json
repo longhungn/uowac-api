@@ -23,7 +23,10 @@
     "typeorm:run": "npm run typeorm migration:run",
     "migrate:dev": "npm run typeorm migration:generate -- -c development -n",
     "runmigrate:dev": "npm run typeorm migration:run -- -c development",
-    "revertmigrate:dev": "npm run typeorm migration:revert -- -c development"
+    "revertmigrate:dev": "npm run typeorm migration:revert -- -c development",
+    "auth0:deploy": "ts-node auth0/deploy.ts",
+    "auth0:export": "ts-node auth0/export.ts",
+    "heroku-postbuild": "npm run auth0:deploy"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
