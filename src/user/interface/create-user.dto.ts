@@ -35,4 +35,8 @@ export class DtoCreateUser {
 
   @IsOptional()
   role: string[];
+
+  @IsOptional()
+  @IsString()
+  provider: string;
 }

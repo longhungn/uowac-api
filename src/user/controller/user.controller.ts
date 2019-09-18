@@ -6,10 +6,12 @@ import {
   Param,
   Delete,
   Patch,
+  NotFoundException,
 } from '@nestjs/common';
 import { DtoCreateUser } from '../interface/create-user.dto';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
+import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
 
 @Controller('user')
 export class UserController {
@@ -38,5 +40,21 @@ export class UserController {
   @Patch()
   async updateUser(@Body() dtoUpdateUser: DtoCreateUser): Promise<User> {
     return await this.userService.updateUser(dtoUpdateUser);
+  }
+
+  @Post('sync')
+  async syncUser(@Body() data: DtoCreateUser) {
+    let user;
+    try {
+      user = await this.userService.updateUser(data);
+    } catch (err) {
+      if (err instanceof EntityDoesNotExistError) {
+        user = await this.userService.createUser(data);
+      } else {
+        throw err;
+      }
+    }
+
+    return user;
   }
 }

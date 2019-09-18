@@ -1,4 +1,10 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
 import { Comment } from '../../social/entity/comment.entity';
 import { Visit } from '../../social/entity/visit.entity';
 
@@ -33,6 +39,12 @@ export class User {
     nullable: true,
   })
   role: string[];
+
+  @Column({ nullable: true })
+  provider: string;
+
+  @CreateDateColumn()
+  joinDate: Date;
 
   @OneToMany(type => Comment, comment => comment.user)
   comments: Comment[];
