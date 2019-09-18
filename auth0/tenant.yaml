@@ -23,7 +23,7 @@ resourceServers:
       - value: "delete:sculpture"
         description: Delete sculpture from database
       - value: "delete:all_comment"
-        description: "delete comments of any user"
+        description: delete comments of any user
     signing_alg: RS256
     skip_consent_for_verifiable_first_party_clients: true
     token_dialect: access_token_authz
@@ -213,6 +213,21 @@ guardianFactors:
     enabled: false
 guardianFactorProviders: []
 guardianFactorTemplates: []
-roles: []
+roles:
+  - name: admin
+    description: Administrator
+    permissions:
+      - permission_name: "create:sculpture"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "create:user"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "delete:all_comment"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "delete:sculpture"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "update:sculpture"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "update:user"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
 branding: {}
 prompts: {}
