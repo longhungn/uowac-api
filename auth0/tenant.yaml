@@ -1,5 +1,10 @@
 emailProvider: {}
 rules:
+  - name: Only allow admin into web app
+    script: ./rules/Only allow admin into web app.js
+    stage: login_success
+    enabled: true
+    order: 1
   - name: Sync user data with database
     script: ./rules/Sync user data with database.js
     stage: login_success
@@ -24,6 +29,8 @@ resourceServers:
         description: Delete sculpture from database
       - value: "delete:all_comment"
         description: delete comments of any user
+      - value: "view:all_users"
+        description: See list of all users
     signing_alg: RS256
     skip_consent_for_verifiable_first_party_clients: true
     token_dialect: access_token_authz
@@ -35,6 +42,8 @@ clients:
     app_type: native
     callbacks:
       - "https://auth.expo.io/@longhungn/auth0-example"
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
     client_aliases: []
     cross_origin_auth: false
     custom_login_page_on: true
@@ -56,6 +65,10 @@ clients:
     app_type: spa
     callbacks:
       - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
+      - "http://localhost:3000"
+      - "https://hello-next.aaazureee.now.sh"
+      - "https://dashboard-aaazureee.uowac.now.sh/"
+      - "https://dashboard.uowac.now.sh"
     client_aliases: []
     cross_origin_auth: false
     custom_login_page_on: true
@@ -63,7 +76,6 @@ clients:
       - authorization_code
       - implicit
       - refresh_token
-      - client_credentials
     is_first_party: true
     is_token_endpoint_ip_header_trusted: false
     jwt_configuration:
@@ -198,15 +210,13 @@ roles:
     permissions:
       - permission_name: "create:sculpture"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
-      - permission_name: "create:user"
-        resource_server_identifier: "https://uowac-api.herokuapp.com"
       - permission_name: "delete:all_comment"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
       - permission_name: "delete:sculpture"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
       - permission_name: "update:sculpture"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
-      - permission_name: "update:user"
+      - permission_name: "view:all_users"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
 branding: {}
 prompts: {}

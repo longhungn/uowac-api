@@ -12,6 +12,6 @@ export const config = {
     SYNC_USER_CLIENT_ID: process.env.SYNC_USER_CLIENT_ID,
     SYNC_USER_CLIENT_SECRET: process.env.SYNC_USER_CLIENT_SECRET,
   },
-  AUTH0_ALLOW_DELETE: IS_PROD,
+  AUTH0_ALLOW_DELETE: false,
   AUTH0_EXCLUDED_RULES: [],
 };
