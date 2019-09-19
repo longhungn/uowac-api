@@ -7,10 +7,14 @@ import {
   Body,
   Delete,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { SculptureService } from '../service/sculpture.service';
 import { DtoCreateSculpture } from '../interface/create-sculpture.dto';
 import { Sculpture } from '../entity/sculpture.entity';
+import { ScopesGuard } from '../../auth/scopes.guard';
+import { Scopes } from '../../auth/scopes.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('sculpture')
 export class SculptureController {
@@ -34,6 +38,8 @@ export class SculptureController {
   }
 
   @Post()
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('create:sculpture')
   async createSculpture(
     @Body() dtoCreateSculpture: DtoCreateSculpture
   ): Promise<Sculpture> {
@@ -41,11 +47,15 @@ export class SculptureController {
   }
 
   @Delete('/:id')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('delete:sculpture')
   async deleteSculpture(@Param('id') id: string): Promise<void> {
     await this.sculptureService.deleteSculpture(id);
   }
 
   @Patch()
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('update:sculpture')
   async updateSculpture(
     @Body() dtoUpdateSculpture: DtoCreateSculpture
   ): Promise<Sculpture> {
