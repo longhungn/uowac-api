@@ -1,15 +1,33 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { VisitService } from '../service/visit.service';
 import { DtoCreateVisit } from '../interface/create-visit.dto';
 import { Visit } from '../entity/visit.entity';
+import { UserParam } from '../../auth/user.decorator';
+import { AuthUser } from '../../auth/auth-user.interface';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('visit')
 export class VisitController {
   constructor(private readonly visitService: VisitService) {}
 
   @Post()
-  async createVisit(@Body() dtoCreateVisit: DtoCreateVisit): Promise<Visit> {
-    return await this.visitService.createVisit(dtoCreateVisit);
+  @UseGuards(AuthGuard())
+  async createVisit(
+    @Body() dtoCreateVisit: DtoCreateVisit,
+    @UserParam() user: AuthUser
+  ): Promise<Visit> {
+    return await this.visitService.createVisit(
+      user.userId,
+      dtoCreateVisit.sculptureId
+    );
   }
 
   @Get('/:visitId')
