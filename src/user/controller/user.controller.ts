@@ -17,6 +17,8 @@ import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.er
 import { AuthGuard } from '@nestjs/passport';
 import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
+import { AuthUser } from '../../auth/auth-user.interface';
+import { UserParam } from '../../auth/user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -24,8 +26,16 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:all_users')
   async getAllUsers(): Promise<User[]> {
     return await this.userService.getAllUsers();
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard())
+  async getMyUser(@UserParam() user: AuthUser) {
+    return await this.userService.getUserById(user.userId);
   }
 
   @Get('/:id')
@@ -33,20 +43,20 @@ export class UserController {
     return await this.userService.getUserById(id);
   }
 
-  @Post()
-  async createUser(@Body() dtoCreateUser: DtoCreateUser): Promise<User> {
-    return await this.userService.createUser(dtoCreateUser);
-  }
+  // @Post()
+  // async createUser(@Body() dtoCreateUser: DtoCreateUser): Promise<User> {
+  //   return await this.userService.createUser(dtoCreateUser);
+  // }
 
-  @Delete('/:id')
-  async deleteUserById(@Param('id') id: string): Promise<void> {
-    await this.userService.deleteUserById(id);
-  }
+  // @Delete('/:id')
+  // async deleteUserById(@Param('id') id: string): Promise<void> {
+  //   await this.userService.deleteUserById(id);
+  // }
 
-  @Patch()
-  async updateUser(@Body() dtoUpdateUser: DtoCreateUser): Promise<User> {
-    return await this.userService.updateUser(dtoUpdateUser);
-  }
+  // @Patch()
+  // async updateUser(@Body() dtoUpdateUser: DtoCreateUser): Promise<User> {
+  //   return await this.userService.updateUser(dtoUpdateUser);
+  // }
 
   @Post('sync')
   @UseGuards(AuthGuard(), ScopesGuard)
