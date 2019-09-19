@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const IS_PROD = process.env.NODE_ENV === 'production' ? true : false;
+
 export const config = {
   AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -10,6 +12,6 @@ export const config = {
     SYNC_USER_CLIENT_ID: process.env.SYNC_USER_CLIENT_ID,
     SYNC_USER_CLIENT_SECRET: process.env.SYNC_USER_CLIENT_SECRET,
   },
-  AUTH0_ALLOW_DELETE: false,
+  AUTH0_ALLOW_DELETE: IS_PROD,
   AUTH0_EXCLUDED_RULES: [],
 };
