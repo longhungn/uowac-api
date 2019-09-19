@@ -1,0 +1,222 @@
+emailProvider: {}
+rules:
+  - name: Only allow admin into web app
+    script: ./rules/Only allow admin into web app.js
+    stage: login_success
+    enabled: true
+    order: 1
+  - name: Sync user data with database
+    script: ./rules/Sync user data with database.js
+    stage: login_success
+    enabled: true
+    order: 2
+pages: []
+resourceServers:
+  - name: uowac-api
+    identifier: "https://uowac-api.herokuapp.com"
+    allow_offline_access: true
+    enforce_policies: true
+    scopes:
+      - value: "create:user"
+        description: Create new user entry in database
+      - value: "update:user"
+        description: Update user entry in database
+      - value: "create:sculpture"
+        description: Create sculpture in database
+      - value: "update:sculpture"
+        description: Update sculpture
+      - value: "delete:sculpture"
+        description: Delete sculpture from database
+      - value: "delete:all_comment"
+        description: delete comments of any user
+      - value: "view:all_users"
+        description: See list of all users
+    signing_alg: RS256
+    skip_consent_for_verifiable_first_party_clients: true
+    token_dialect: access_token_authz
+    token_lifetime: 86400
+    token_lifetime_for_web: 7200
+clients:
+  - name: UOWAC Sculpture
+    allowed_clients: []
+    app_type: native
+    callbacks:
+      - "https://auth.expo.io/@longhungn/auth0-example"
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
+    client_aliases: []
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+    token_endpoint_auth_method: none
+  - name: UOWAC Sculpture Admin
+    allowed_clients: []
+    app_type: spa
+    callbacks:
+      - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
+      - "http://localhost:3000"
+      - "https://hello-next.aaazureee.now.sh"
+      - "https://dashboard-aaazureee.uowac.now.sh/"
+      - "https://dashboard.uowac.now.sh"
+    client_aliases: []
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: false
+    sso_disabled: false
+    token_endpoint_auth_method: none
+  - name: User sync
+    app_type: non_interactive
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+  - name: auth0-deploy-cli-extension
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+  - name: uowac-api (Test Application)
+    app_type: non_interactive
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+databases:
+  - name: Username-Password-Authentication
+    strategy: auth0
+    enabled_clients:
+      - UOWAC Sculpture Admin
+      - UOWAC Sculpture
+      - User sync
+      - auth0-deploy-cli-extension
+      - uowac-api (Test Application)
+    is_domain_connection: false
+    options:
+      mfa:
+        active: true
+        return_enroll_settings: true
+      passwordPolicy: good
+      strategy_version: 2
+      brute_force_protection: true
+    realms:
+      - Username-Password-Authentication
+connections:
+  - name: google-oauth2
+    strategy: google-oauth2
+    enabled_clients:
+      - UOWAC Sculpture Admin
+      - UOWAC Sculpture
+      - User sync
+      - auth0-deploy-cli-extension
+      - uowac-api (Test Application)
+    is_domain_connection: false
+    options:
+      email: true
+      profile: true
+      scope:
+        - email
+        - profile
+tenant:
+  enabled_locales:
+    - en
+  flags:
+    disable_clickjack_protection_headers: false
+rulesConfigs:
+  - key: SYNC_USER_URL
+    value: ##SYNC_USER_URL##
+  - key: SYNC_USER_CLIENT_ID
+    value: ##SYNC_USER_CLIENT_ID##
+  - key: SYNC_USER_CLIENT_SECRET
+    value: ##SYNC_USER_CLIENT_SECRET##
+emailTemplates: []
+clientGrants:
+  - client_id: User sync
+    audience: "https://uowac-api.herokuapp.com"
+    scope:
+      - "create:user"
+      - "update:user"
+  - client_id: uowac-api (Test Application)
+    audience: "https://uowac-api.herokuapp.com"
+    scope: []
+guardianFactors:
+  - name: duo
+    enabled: false
+  - name: email
+    enabled: false
+  - name: otp
+    enabled: false
+  - name: push-notification
+    enabled: false
+  - name: sms
+    enabled: false
+guardianFactorProviders: []
+guardianFactorTemplates: []
+roles:
+  - name: admin
+    description: Administrator
+    permissions:
+      - permission_name: "create:sculpture"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "delete:all_comment"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "delete:sculpture"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "update:sculpture"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "view:all_users"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+branding: {}
+prompts: {}

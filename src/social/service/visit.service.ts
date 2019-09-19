@@ -34,13 +34,16 @@ export class VisitService {
     return sculpture;
   }
 
-  async createVisit(dtoCreateVisit: DtoCreateVisit): Promise<Visit> {
+  async createVisit(userId, sculptureId): Promise<Visit> {
     // Uncomment verifyUserExistence() verifySculptureExistence() for more clarification of Foreign key error
     // const { userId, sculptureId } = dtoCreateVisit;
     // await this.verifyUserExistence(userId);
     // await this.verifySculptureExistence(sculptureId);
 
-    const visit = await this.manager.create(Visit, dtoCreateVisit);
+    const visit = await this.manager.create(Visit, {
+      userId,
+      sculptureId,
+    });
     return await this.manager.save(visit);
   }
 

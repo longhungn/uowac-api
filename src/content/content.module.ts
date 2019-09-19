@@ -6,8 +6,10 @@ import { SculptureMakerService } from './service/sculpture-maker.service';
 import { SculptureImageService } from './service/image.service';
 import { PictureUploader } from './service/picture-uploader.service';
 import { SculptureImageController } from './controller/image.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [SculptureController, MakerController, SculptureImageController],
   providers: [
     SculptureService,

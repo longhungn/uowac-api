@@ -6,21 +6,31 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentService } from '../service/comment.service';
 import { DtoCreateComment } from '../interface/create-comment.dto';
 import { Comment } from '../entity/comment.entity';
 import { DtoUpdateComment } from '../interface/update-comment.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { UserParam } from '../../auth/user.decorator';
+import { AuthUser } from '../../auth/auth-user.interface';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post()
+  @UseGuards(AuthGuard())
   async createComment(
-    @Body() dtoCreateComment: DtoCreateComment
+    @Body() data: DtoCreateComment,
+    @UserParam() user: AuthUser
   ): Promise<Comment> {
-    return await this.commentService.createComment(dtoCreateComment);
+    return await this.commentService.createComment(
+      user.userId,
+      data.sculptureId,
+      data.content
+    );
   }
 
   @Get('/:commentId')
@@ -45,10 +55,16 @@ export class CommentController {
   }
 
   @Patch()
+  @UseGuards(AuthGuard())
   async updateComment(
-    @Body() dtoUpdateComment: DtoUpdateComment
+    @Body() data: DtoUpdateComment,
+    @UserParam() user: AuthUser
   ): Promise<Comment> {
-    return await this.commentService.updateComment(dtoUpdateComment);
+    return await this.commentService.updateComment(
+      user.userId,
+      data.commentId,
+      data.content
+    );
   }
 
   @Delete('/:commentId')

@@ -1,3 +1,11 @@
  npm run typeorm migration:generate --  -c development -n MigrationName  //gen migration
 
  npm run typeorm migration:create -- -n LoadData -d src/migrations //create empty migration
+
+rulesConfigs:
+  - key: SYNC_USER_URL
+    value: ##SYNC_USER_URL##
+  - key: SYNC_USER_CLIENT_ID
+    value: ##SYNC_USER_CLIENT_ID##
+  - key: SYNC_USER_CLIENT_SECRET
+    value: ##SYNC_USER_CLIENT_SECRET##

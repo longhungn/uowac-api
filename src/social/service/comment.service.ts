@@ -36,13 +36,21 @@ export class CommentService {
     return sculpture;
   }
 
-  async createComment(dtoCreateComment: DtoCreateComment): Promise<Comment> {
+  async createComment(
+    userId: string,
+    sculptureId: string,
+    content: string
+  ): Promise<Comment> {
     // Uncomment verifyUserExistence() verifySculptureExistence() for more clarification of Foreign key error
 
     // await this.verifyUserExistence(userId);
     // await this.verifySculptureExistence(sculptureId);
 
-    const comment = await this.manager.create(Comment, dtoCreateComment);
+    const comment = await this.manager.create(Comment, {
+      userId,
+      sculptureId,
+      content,
+    });
     return await this.manager.save(comment);
   }
 
@@ -74,15 +82,20 @@ export class CommentService {
     return comments;
   }
 
-  async updateComment(dtoUpdateComment: DtoUpdateComment): Promise<Comment> {
-    const comment: Comment = await this.manager.preload(
-      Comment,
-      dtoUpdateComment
-    );
+  async updateComment(
+    userId: string,
+    commentId: string,
+    content: string
+  ): Promise<Comment> {
+    const comment: Comment = await this.manager.preload(Comment, {
+      commentId,
+      userId,
+      content,
+    });
 
     if (!comment) {
       throw new EntityDoesNotExistError(
-        `Comment with id ${dtoUpdateComment.commentId} does not exist`
+        `Comment with id ${commentId} does not exist`
       );
     }
 
