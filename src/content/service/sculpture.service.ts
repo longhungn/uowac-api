@@ -7,15 +7,32 @@ import { MissingRelationError } from '../error/missing-property.error';
 import { DtoCreateSculpture } from '../interface/create-sculpture.dto';
 import { UniqueConstraintError } from '../error/unique-constraint.error';
 import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
+import { SculptureStats } from '../entity/sculpture-stats.entity';
 
 @Injectable()
 export class SculptureService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
-  async allSculptures(): Promise<Sculpture[]> {
-    return await this.manager.find(Sculpture, {
+  async allSculptures() {
+    const sculptures = await this.manager.find(Sculpture, {
       relations: ['primaryMaker', 'images'],
     });
+
+    const sculpturesWithStats = await Promise.all(
+      sculptures.map(async sculpture => {
+        const stats = await this.manager.findOne(SculptureStats, {
+          sculptureId: sculpture.accessionId,
+        });
+
+        const { totalVisits, totalLikes, totalComments } = stats;
+
+        const result = { ...sculpture, totalVisits, totalLikes, totalComments };
+
+        return result;
+      })
+    );
+
+    return sculpturesWithStats;
   }
 
   async allSculpturesShortForm(): Promise<SculptureShort[]> {
