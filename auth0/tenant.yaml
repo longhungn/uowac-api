@@ -37,8 +37,92 @@ resourceServers:
     token_lifetime: 86400
     token_lifetime_for_web: 7200
 clients:
+  - name: UOW Sculptures
+    allowed_clients: []
+    allowed_logout_urls:
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
+    allowed_origins:
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
+    app_type: non_interactive
+    callbacks:
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
+    client_aliases: []
+    cross_origin_auth: false
+    custom_login_page_on: true
+    description: Mobile app
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    sso_disabled: false
+    token_endpoint_auth_method: client_secret_post
+    web_origins:
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
+  - name: UOW Sculptures Admin
+    allowed_clients: []
+    allowed_logout_urls:
+      - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
+      - "http://localhost:3000"
+      - "https://hello-next.aaazureee.now.sh"
+      - "https://dashboard-aaazureee.uowac.now.sh/"
+      - "https://dashboard.uowac.now.sh"
+    allowed_origins:
+      - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
+      - "http://localhost:3000"
+      - "https://hello-next.aaazureee.now.sh"
+      - "https://dashboard-aaazureee.uowac.now.sh/"
+      - "https://dashboard.uowac.now.sh"
+    app_type: spa
+    callbacks:
+      - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
+      - "http://localhost:3000"
+      - "https://hello-next.aaazureee.now.sh"
+      - "https://dashboard-aaazureee.uowac.now.sh/"
+      - "https://dashboard.uowac.now.sh"
+    client_aliases: []
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: false
+    sso_disabled: false
+    token_endpoint_auth_method: none
+    web_origins:
+      - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
+      - "http://localhost:3000"
+      - "https://hello-next.aaazureee.now.sh"
+      - "https://dashboard-aaazureee.uowac.now.sh/"
+      - "https://dashboard.uowac.now.sh"
   - name: UOWAC Sculpture
     allowed_clients: []
+    allowed_logout_urls:
+      - "https://auth.expo.io/@longhungn/auth0-example"
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
+    allowed_origins:
+      - "https://auth.expo.io/@longhungn/auth0-example"
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
     app_type: native
     callbacks:
       - "https://auth.expo.io/@longhungn/auth0-example"
@@ -60,30 +144,10 @@ clients:
     oidc_conformant: true
     sso_disabled: false
     token_endpoint_auth_method: none
-  - name: UOWAC Sculpture Admin
-    allowed_clients: []
-    app_type: spa
-    callbacks:
-      - "https://uowac-dev.au8.webtask.io/auth0-authentication-api-debugger"
-      - "http://localhost:3000"
-      - "https://hello-next.aaazureee.now.sh"
-      - "https://dashboard-aaazureee.uowac.now.sh/"
-      - "https://dashboard.uowac.now.sh"
-    client_aliases: []
-    cross_origin_auth: false
-    custom_login_page_on: true
-    grant_types:
-      - authorization_code
-      - implicit
-      - refresh_token
-    is_first_party: true
-    is_token_endpoint_ip_header_trusted: false
-    jwt_configuration:
-      lifetime_in_seconds: 36000
-      secret_encoded: false
-    oidc_conformant: false
-    sso_disabled: false
-    token_endpoint_auth_method: none
+    web_origins:
+      - "https://auth.expo.io/@longhungn/auth0-example"
+      - "https://auth.expo.io/@namjose/ExpoUOWS"
+      - "https://auth.expo.io/@aaazureee/ExpoUOWS"
   - name: User sync
     app_type: non_interactive
     cross_origin_auth: false
@@ -138,30 +202,75 @@ databases:
   - name: Username-Password-Authentication
     strategy: auth0
     enabled_clients:
-      - UOWAC Sculpture Admin
-      - UOWAC Sculpture
       - User sync
-      - auth0-deploy-cli-extension
       - uowac-api (Test Application)
+      - UOW Sculptures
+      - auth0-deploy-cli-extension
+      - UOWAC Sculpture
     is_domain_connection: false
     options:
       mfa:
         active: true
         return_enroll_settings: true
-      passwordPolicy: good
+      passwordPolicy: low
       strategy_version: 2
       brute_force_protection: true
+      enabledDatabaseCustomization: false
+      import_mode: false
+      password_no_personal_info:
+        enable: false
+      password_dictionary:
+        enable: false
+        dictionary: []
+      password_history:
+        enable: false
+        size: 5
+      validation:
+        username:
+          min: 1
+          max: 15
+      password_complexity_options:
+        min_length: 6
+      requires_username: true
     realms:
       - Username-Password-Authentication
+  - name: admin-only
+    strategy: auth0
+    enabled_clients:
+      - UOW Sculptures Admin
+    is_domain_connection: false
+    options:
+      mfa:
+        active: true
+        return_enroll_settings: true
+      passwordPolicy: low
+      disable_signup: true
+      requires_username: false
+      strategy_version: 2
+      brute_force_protection: true
+      enabledDatabaseCustomization: false
+      import_mode: false
+      password_no_personal_info:
+        enable: false
+      password_dictionary:
+        enable: false
+        dictionary: []
+      password_history:
+        enable: false
+        size: 5
+      password_complexity_options:
+        min_length: 6
+    realms:
+      - admin-only
 connections:
   - name: google-oauth2
     strategy: google-oauth2
     enabled_clients:
-      - UOWAC Sculpture Admin
-      - UOWAC Sculpture
       - User sync
-      - auth0-deploy-cli-extension
       - uowac-api (Test Application)
+      - UOW Sculptures
+      - auth0-deploy-cli-extension
+      - UOWAC Sculpture
     is_domain_connection: false
     options:
       email: true
@@ -169,11 +278,49 @@ connections:
       scope:
         - email
         - profile
+      client_id: ""
+      client_secret: ""
+      allowed_audiences: ""
+      contacts: false
+      blogger: false
+      calendar: false
+      gmail: false
+      google_plus: false
+      orkut: false
+      picasa_web: false
+      tasks: false
+      youtube: false
+      adsense_management: false
+      google_affiliate_network: false
+      analytics: false
+      google_books: false
+      google_cloud_storage: false
+      content_api_for_shopping: false
+      chrome_web_store: false
+      document_list: false
+      google_drive: false
+      google_drive_files: false
+      latitude_best: false
+      latitude_city: false
+      moderator: false
+      sites: false
+      spreadsheets: false
+      url_shortener: false
+      webmaster_tools: false
+      coordinate: false
+      coordinate_readonly: false
 tenant:
   enabled_locales:
     - en
   flags:
+    universal_login: false
+    new_universal_login_experience_enabled: false
     disable_clickjack_protection_headers: false
+  picture_url: "https://i.imgur.com/6m7JBgY.png"
+  universal_login:
+    colors:
+      primary: "#0047BB"
+      page_background: "#000000"
 rulesConfigs:
   - key: SYNC_USER_URL
     value: ##SYNC_USER_URL##
@@ -183,6 +330,9 @@ rulesConfigs:
     value: ##SYNC_USER_CLIENT_SECRET##
 emailTemplates: []
 clientGrants:
+  - client_id: UOW Sculptures
+    audience: "https://uowac-api.herokuapp.com"
+    scope: []
   - client_id: User sync
     audience: "https://uowac-api.herokuapp.com"
     scope:
