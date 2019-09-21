@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Comment } from '../../social/entity/comment.entity';
 import { Visit } from '../../social/entity/visit.entity';
+import { Like } from '../../social/entity/like.entity';
 
 @Entity()
 export class User {
@@ -51,4 +52,7 @@ export class User {
 
   @OneToMany(type => Visit, visit => visit.user)
   visits: Visit[];
+
+  @OneToMany(type => Like, like => like.user)
+  likes: Like[];
 }

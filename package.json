@@ -26,7 +26,7 @@
     "revertmigrate:dev": "npm run typeorm migration:revert -- -c development",
     "auth0:deploy": "ts-node auth0/deploy.ts",
     "auth0:export": "ts-node auth0/export.ts",
-    "heroku-postbuild": "npm run auth0:deploy"
+    "heroku-postbuild": "echo \"Auto auth0 deploy disabled\""
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
