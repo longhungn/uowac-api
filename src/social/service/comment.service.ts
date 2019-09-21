@@ -1,12 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager, Timestamp } from 'typeorm';
+import {
+  EntityManager,
+  Timestamp,
+  SelectQueryBuilder,
+  ObjectLiteral,
+} from 'typeorm';
 import { Comment } from '../entity/comment.entity';
 import { DtoCreateComment } from '../interface/create-comment.dto';
 import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 import { DtoUpdateComment } from '../interface/update-comment.dto';
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
+import { SculptureImage } from '../../content/entity/image.entity';
 
 @Injectable()
 export class CommentService {
@@ -67,7 +73,15 @@ export class CommentService {
   async getCommentsByUserId(userId: string): Promise<Comment[]> {
     await this.verifyUserExistence(userId);
 
-    const comments: Comment[] = await this.manager.find(Comment, { userId });
+    const comments = await this.manager
+      .createQueryBuilder(Comment, 'comment')
+      .select(['comment.content', 'comment.commentId'])
+      .addSelect(['user.userId', 'user.picture', 'sculpture.accessionId'])
+      .leftJoin('comment.user', 'user')
+      .leftJoin('comment.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('comment.userId = :userId', { userId })
+      .getMany();
 
     return comments;
   }
@@ -75,10 +89,15 @@ export class CommentService {
   async getCommentsBySculptureId(sculptureId: string): Promise<Comment[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const comments: Comment[] = await this.manager.find(Comment, {
-      sculptureId,
-    });
-
+    const comments = await this.manager
+      .createQueryBuilder(Comment, 'comment')
+      .select(['comment.content', 'comment.commentId'])
+      .addSelect(['user.userId', 'user.picture', 'sculpture.accessionId'])
+      .leftJoin('comment.user', 'user')
+      .leftJoin('comment.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('comment.sculptureId = :sculptureId', { sculptureId })
+      .getMany();
     return comments;
   }
 
