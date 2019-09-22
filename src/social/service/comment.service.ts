@@ -81,7 +81,13 @@ export class CommentService {
         'comment.createdTime',
         'comment.updatedTime',
       ])
-      .addSelect(['user.userId', 'user.picture', 'sculpture.accessionId'])
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+      ])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
       .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
@@ -102,7 +108,13 @@ export class CommentService {
         'comment.createdTime',
         'comment.updatedTime',
       ])
-      .addSelect(['user.userId', 'user.picture', 'sculpture.accessionId'])
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+      ])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
       .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
