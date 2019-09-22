@@ -75,7 +75,12 @@ export class CommentService {
 
     const comments = await this.manager
       .createQueryBuilder(Comment, 'comment')
-      .select(['comment.content', 'comment.commentId'])
+      .select([
+        'comment.content',
+        'comment.commentId',
+        'comment.createdTime',
+        'comment.updatedTime',
+      ])
       .addSelect(['user.userId', 'user.picture', 'sculpture.accessionId'])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
@@ -91,7 +96,12 @@ export class CommentService {
 
     const comments = await this.manager
       .createQueryBuilder(Comment, 'comment')
-      .select(['comment.content', 'comment.commentId'])
+      .select([
+        'comment.content',
+        'comment.commentId',
+        'comment.createdTime',
+        'comment.updatedTime',
+      ])
       .addSelect(['user.userId', 'user.picture', 'sculpture.accessionId'])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
