@@ -17,6 +17,15 @@ export class CreateSculptureStatsView1569081433868 implements MigrationInterface
                                     on "sculpture"."accessionId" = "visit"."sculptureId"
                                     GROUP BY "sculpture"."accessionId"
                                 `, undefined);
+        await queryRunner.query(`CREATE TABLE typeorm_metadata
+                                (
+                                    type character varying NOT NULL,
+                                    database character varying,
+                                    schema character varying,
+                                    "table" character varying,
+                                    name character varying,
+                                    value text
+                                )`);
         await queryRunner.query(`INSERT INTO "typeorm_metadata"("type", "schema", "name", "value") VALUES ($1, $2, $3, $4)`, ["VIEW","public","SculptureStats","select  \"sculpture\".\"accessionId\" AS \"sculptureId\", \n            COUNT(\"like\".\"sculptureId\") AS \"totalLikes\",\n            COUNT(\"comment\".\"sculptureId\") AS \"totalComments\",\n            COUNT(\"visit\".\"sculptureId\") AS \"totalVisits\"\n    FROM \"sculpture\" \n    left join \"like\"\n    on \"sculpture\".\"accessionId\" = \"like\".\"sculptureId\"\n    left join \"comment\"\n    on \"sculpture\".\"accessionId\" = \"comment\".\"sculptureId\"\n    left join \"visit\"\n    on \"sculpture\".\"accessionId\" = \"visit\".\"sculptureId\"\n    GROUP BY \"sculpture\".\"accessionId\""]);
     }
 
