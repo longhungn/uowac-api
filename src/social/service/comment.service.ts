@@ -57,7 +57,25 @@ export class CommentService {
       sculptureId,
       content,
     });
-    return await this.manager.save(comment);
+    const result = await this.manager.save(comment);
+    const extraInfo = await this.manager
+      .createQueryBuilder(Comment, 'comment')
+      .select('comment')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('comment.user', 'user')
+      .leftJoin('comment.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('comment.commentId = :commentId', { commentId: result.commentId })
+      .getOne();
+
+    return { ...result, ...extraInfo };
   }
 
   async getCommentById(commentId: string): Promise<Comment> {
@@ -87,6 +105,7 @@ export class CommentService {
         'user.name',
         'user.nickname',
         'sculpture.accessionId',
+        'sculpture.name',
       ])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
@@ -114,6 +133,7 @@ export class CommentService {
         'user.name',
         'user.nickname',
         'sculpture.accessionId',
+        'sculpture.name',
       ])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')

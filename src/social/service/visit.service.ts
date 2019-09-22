@@ -44,7 +44,26 @@ export class VisitService {
       userId,
       sculptureId,
     });
-    return await this.manager.save(visit);
+    const result = await this.manager.save(visit);
+
+    const extraInfo = await this.manager
+      .createQueryBuilder(Visit, 'visit')
+      .select('visit')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('visit.user', 'user')
+      .leftJoin('visit.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('visit.visitId = :visitId', { visitId: result.visitId })
+      .getOne();
+
+    return { ...result, ...extraInfo };
   }
 
   async getVisitById(visitId: string): Promise<Visit> {
@@ -60,7 +79,24 @@ export class VisitService {
   async getVisitsByUserId(userId: string): Promise<Visit[]> {
     await this.verifyUserExistence(userId);
 
-    const visits: Visit[] = await this.manager.find(Visit, { userId });
+    const visits = await this.manager
+      .createQueryBuilder(Visit, 'visit')
+      .select('visit')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('visit.user', 'user')
+      .leftJoin('visit.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('visit.userId = :userId', { userId })
+      .getMany();
+
+    return visits;
 
     return visits;
   }
@@ -68,7 +104,22 @@ export class VisitService {
   async getVisitsBySculptureId(sculptureId: string): Promise<Visit[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const visits: Visit[] = await this.manager.find(Visit, { sculptureId });
+    const visits = await this.manager
+      .createQueryBuilder(Visit, 'visit')
+      .select('visit')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('visit.user', 'user')
+      .leftJoin('visit.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('visit.sculptureId = :sculptureId', { sculptureId })
+      .getMany();
 
     return visits;
   }
