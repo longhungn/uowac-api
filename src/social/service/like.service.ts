@@ -41,7 +41,26 @@ export class LikeService {
     // await this.verifySculptureExistence(sculptureId);
 
     const like = await this.manager.create(Like, { userId, sculptureId });
-    return await this.manager.save(like);
+    const result = await this.manager.save(like);
+
+    const extraInfo = await this.manager
+      .createQueryBuilder(Like, 'like')
+      .select('like')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('like.user', 'user')
+      .leftJoin('like.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('like.likeId = :likeId', { likeId: result.likeId })
+      .getOne();
+
+    return { ...result, ...extraInfo };
   }
 
   async getLikeById(likeId: string): Promise<Like> {
@@ -57,14 +76,46 @@ export class LikeService {
   async getLikesByUserId(userId: string): Promise<Like[]> {
     await this.verifyUserExistence(userId);
 
-    const likes: Like[] = await this.manager.find(Like, { userId });
+    const likes = await this.manager
+      .createQueryBuilder(Like, 'like')
+      .select('like')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('like.user', 'user')
+      .leftJoin('like.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('like.userId = :userId', { userId })
+      .getMany();
+
     return likes;
   }
 
   async getLikesBySculptureId(sculptureId: string): Promise<Like[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const likes: Like[] = await this.manager.find(Like, { sculptureId });
+    const likes = await this.manager
+      .createQueryBuilder(Like, 'like')
+      .select('like')
+      .addSelect([
+        'user.userId',
+        'user.picture',
+        'user.name',
+        'user.nickname',
+        'sculpture.accessionId',
+        'sculpture.name',
+      ])
+      .leftJoin('like.user', 'user')
+      .leftJoin('like.sculpture', 'sculpture')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .where('like.sculptureId = :sculptureId', { sculptureId })
+      .getMany();
+
     return likes;
   }
 
