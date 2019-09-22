@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
@@ -34,11 +38,25 @@ export class VisitService {
     return sculpture;
   }
 
+  async checkDuplicateVisit(userId, sculptureId): Promise<Visit> {
+    const visit = await this.manager.findOne(Visit, {
+      userId,
+      sculptureId,
+    });
+
+    if (visit) {
+      throw new InternalServerErrorException(
+        'You have already visited this sculpture'
+      );
+    }
+    return visit;
+  }
+
   async createVisit(userId, sculptureId): Promise<Visit> {
     // Uncomment verifyUserExistence() verifySculptureExistence() for more clarification of Foreign key error
-    // const { userId, sculptureId } = dtoCreateVisit;
-    // await this.verifyUserExistence(userId);
-    // await this.verifySculptureExistence(sculptureId);
+    await this.verifyUserExistence(userId);
+    await this.verifySculptureExistence(sculptureId);
+    await this.checkDuplicateVisit(userId, sculptureId);
 
     const visit = await this.manager.create(Visit, {
       userId,
