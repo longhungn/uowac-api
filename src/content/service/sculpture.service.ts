@@ -13,6 +13,18 @@ import { SculptureStats } from '../entity/sculpture-stats.entity';
 export class SculptureService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
+  async addStatsToSculpture(sculpture: Sculpture) {
+    const stats = await this.manager.findOne(SculptureStats, {
+      sculptureId: sculpture.accessionId,
+    });
+
+    const { totalVisits, totalLikes, totalComments } = stats;
+
+    const result = { ...sculpture, totalVisits, totalLikes, totalComments };
+
+    return result;
+  }
+
   async allSculptures() {
     const sculptures = await this.manager.find(Sculpture, {
       relations: ['primaryMaker', 'images'],
@@ -20,15 +32,7 @@ export class SculptureService {
 
     const sculpturesWithStats = await Promise.all(
       sculptures.map(async sculpture => {
-        const stats = await this.manager.findOne(SculptureStats, {
-          sculptureId: sculpture.accessionId,
-        });
-
-        const { totalVisits, totalLikes, totalComments } = stats;
-
-        const result = { ...sculpture, totalVisits, totalLikes, totalComments };
-
-        return result;
+        return await this.addStatsToSculpture(sculpture);
       })
     );
 
@@ -66,12 +70,15 @@ export class SculptureService {
   }
 
   async getSculptureById(accessionId: string): Promise<Sculpture | null> {
-    return await this.manager.findOne(Sculpture, {
+    const sculpture = await this.manager.findOne(Sculpture, {
       where: {
         accessionId,
       },
       relations: ['primaryMaker', 'images'],
     });
+
+    const sculptureWithStats = await this.addStatsToSculpture(sculpture);
+    return sculptureWithStats;
   }
 
   async createSculpture(data: DtoCreateSculpture): Promise<Sculpture> {

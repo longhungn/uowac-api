@@ -4,9 +4,9 @@ import { Sculpture } from './sculpture.entity';
 @ViewEntity('SculptureStats', {
   expression: `
     select  "sculpture"."accessionId" AS "sculptureId", 
-            COUNT("like"."sculptureId") AS "totalLikes",
-            COUNT("comment"."sculptureId") AS "totalComments",
-            COUNT("visit"."sculptureId") AS "totalVisits"
+      COUNT(DISTINCT "like"."likeId") AS "totalLikes",
+      COUNT(DISTINCT "comment"."commentId") AS "totalComments",
+      COUNT(DISTINCT "visit"."visitId") AS "totalVisits"
     FROM "sculpture" 
     left join "like"
     on "sculpture"."accessionId" = "like"."sculptureId"
