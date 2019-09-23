@@ -77,6 +77,8 @@ export class SculptureService {
       relations: ['primaryMaker', 'images'],
     });
 
+    if (!sculpture) return null;
+
     const sculptureWithStats = await this.addStatsToSculpture(sculpture);
     return sculptureWithStats;
   }
@@ -105,7 +107,11 @@ export class SculptureService {
   }
 
   async deleteSculpture(accessionId: string): Promise<void> {
-    const sculpture = await this.getSculptureById(accessionId);
+    const sculpture = await this.manager.findOne(Sculpture, {
+      where: {
+        accessionId,
+      },
+    });
     if (!sculpture) {
       throw new EntityDoesNotExistError(
         'There is no sculpture with this accessionId: ' + accessionId
