@@ -17,7 +17,7 @@ export class Comment {
 
   // many-to-one relationship with User
   @ManyToOne(type => User, user => user.comments, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })
   user: User;
@@ -28,7 +28,7 @@ export class Comment {
 
   // many-to-one relationship with Sculpture
   @ManyToOne(type => Sculpture, sculpture => sculpture.comments, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'sculptureId' })
   sculpture: Sculpture;

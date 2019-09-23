@@ -15,7 +15,7 @@ export class Visit {
   visitId: string;
 
   @ManyToOne(type => User, user => user.visits, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })
   user: User;
@@ -24,7 +24,7 @@ export class Visit {
   userId: string;
 
   @ManyToOne(type => Sculpture, sculpture => sculpture.visits, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'sculptureId' })
   sculpture: Sculpture;
