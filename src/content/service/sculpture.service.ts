@@ -30,13 +30,7 @@ export class SculptureService {
       relations: ['primaryMaker', 'images'],
     });
 
-    const sculpturesWithStats = await Promise.all(
-      sculptures.map(async sculpture => {
-        return await this.addStatsToSculpture(sculpture);
-      })
-    );
-
-    return sculpturesWithStats;
+    return sculptures;
   }
 
   async allSculpturesShortForm(): Promise<SculptureShort[]> {
@@ -77,10 +71,7 @@ export class SculptureService {
       relations: ['primaryMaker', 'images'],
     });
 
-    if (!sculpture) return null;
-
-    const sculptureWithStats = await this.addStatsToSculpture(sculpture);
-    return sculptureWithStats;
+    return sculpture;
   }
 
   async createSculpture(data: DtoCreateSculpture): Promise<Sculpture> {
