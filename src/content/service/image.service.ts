@@ -9,10 +9,11 @@ import { PictureUploader } from './picture-uploader.service';
 @Injectable()
 export class SculptureImageService {
   private readonly logger = new Logger(SculptureImageService.name);
-  constructor(
-    private readonly manager: EntityManager,
-    private readonly uploader: PictureUploader
-  ) {}
+  private readonly uploader = new PictureUploader(
+    process.env.AWS_S3_PICTURE_BUCKET_NAME
+  );
+
+  constructor(private readonly manager: EntityManager) {}
 
   //Overload
   async insertPicture(

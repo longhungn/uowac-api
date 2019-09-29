@@ -22,7 +22,14 @@ export class SculptureController {
 
   @Get()
   async getAllSculptures() {
-    return await this.sculptureService.allSculptures();
+    const sculptures = await this.sculptureService.allSculptures();
+    const sculpturesWithStats = await Promise.all(
+      sculptures.map(async sculpture => {
+        return await this.sculptureService.addStatsToSculpture(sculpture);
+      })
+    );
+
+    return sculpturesWithStats;
   }
 
   @Get('/:id')
@@ -34,7 +41,7 @@ export class SculptureController {
       );
     }
 
-    return sculpture;
+    return this.sculptureService.addStatsToSculpture(sculpture);
   }
 
   @Post()

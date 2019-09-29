@@ -5,10 +5,10 @@ require('dotenv').config();
 
 @Injectable()
 export class PictureUploader {
-  public AWS_S3_BUCKET_NAME: string = process.env.AWS_S3_PICTURE_BUCKET_NAME;
+  public AWS_S3_BUCKET_NAME: string;
   public s3: S3;
 
-  constructor() {
+  constructor(readonly bucketName) {
     this.s3 = new S3({
       apiVersion: '2006-03-01',
       region: process.env.AWS_REGION,
@@ -17,6 +17,8 @@ export class PictureUploader {
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
     });
+
+    this.AWS_S3_BUCKET_NAME = bucketName;
   }
 
   //returns full url to image
@@ -44,5 +46,17 @@ export class PictureUploader {
     };
 
     await this.s3.deleteObject(params).promise();
+  }
+
+  async deleteImageFromS3url(url: string) {
+    if (!url.includes('amazonaws.com')) {
+      return;
+    }
+
+    const urlObj = new URL(url);
+    const bucket = urlObj.hostname.split('.')[0];
+    const key = urlObj.pathname;
+
+    return this.deleteImageFromS3(bucket, key);
   }
 }

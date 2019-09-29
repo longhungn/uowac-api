@@ -7,36 +7,36 @@ export class DtoCreateUser {
 
   @IsOptional()
   @IsString()
-  email: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
-  givenName: string;
+  givenName?: string;
 
   @IsOptional()
   @IsString()
-  familyName: string;
+  familyName?: string;
 
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
-  nickname: string;
+  nickname?: string;
 
   @IsOptional()
   @IsString()
-  gender: string;
+  gender?: string;
 
   @IsOptional()
   @IsString()
-  picture: string;
+  picture?: string;
 
   @IsOptional()
-  role: string[];
+  role?: string[];
 
   @IsOptional()
   @IsString()
-  provider: string;
+  provider?: string;
 }
