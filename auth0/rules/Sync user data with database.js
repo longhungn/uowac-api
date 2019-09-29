@@ -12,10 +12,9 @@ function (user, context, callback) {
   const clientSecret = configuration.SYNC_USER_CLIENT_SECRET;
 
   const assignedRoles = (context.authorization || {}).roles;
-  const provider = user.user_id.split('|')[0];
 
   request.post({
-  	url: 'https://uowac-dev.au.auth0.com/oauth/token',
+  	url: `https://${context.tenant}.au.auth0.com/oauth/token`,
     json: {
     	"client_id": clientId,
       "client_secret": clientSecret,
@@ -35,6 +34,7 @@ function (user, context, callback) {
   });
   
   function syncUser(accessToken, user) {
+    const provider = user.user_id.split('|')[0];
   	request.post({
     	url: url,
       auth: {
@@ -49,7 +49,8 @@ function (user, context, callback) {
         email: user.email,
         givenName: user.given_name,
         familyName: user.family_name,
-        gender: user.gender
+        gender: user.gender,
+        provider
       }
     }, function(err, response, body) {
     	if (err) return callback(err);

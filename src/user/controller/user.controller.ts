@@ -9,6 +9,8 @@ import {
   NotFoundException,
   Logger,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { DtoCreateUser } from '../interface/create-user.dto';
 import { User } from '../entity/user.entity';
@@ -19,10 +21,18 @@ import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
 import { AuthUser } from '../../auth/auth-user.interface';
 import { UserParam } from '../../auth/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { IMulterUploadedFile } from '../../content/interface/multer-uploaded-file.interface';
+import { DtoUpdateUser } from '../interface/update-user.dto';
+import { PictureUploader } from '../../content/service/picture-uploader.service';
 
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger(UserController.name);
+  private readonly picUploader = new PictureUploader(
+    process.env.AWS_S3_PROFILE_PIC_BUCKET_NAME
+  );
+
   constructor(private readonly userService: UserService) {}
 
   @Get()
@@ -36,6 +46,38 @@ export class UserController {
   @UseGuards(AuthGuard())
   async getMyUser(@UserParam() user: AuthUser) {
     return await this.userService.getUserById(user.userId);
+  }
+
+  @Patch('me')
+  @UseGuards(AuthGuard())
+  @UseInterceptors(FileInterceptor('picture'))
+  async updateMyProfile(
+    @UploadedFile() picture: IMulterUploadedFile,
+    @Body() body: DtoUpdateUser,
+    @UserParam() userParam: AuthUser
+  ) {
+    const user: User = await this.userService.getUserById(userParam.userId);
+    //check if past profile pic is in S3
+    if (user.picture.includes('amazonaws.com')) {
+      await this.picUploader.deleteImageFromS3url(user.picture);
+    }
+
+    let picUrl: string = null;
+
+    if (user.provider === 'auth0') {
+      //Upload new pic
+      //prettier-ignore
+      let fileName = `${user.userId}/${Date.now().toString()}-${picture.originalname}`;
+      fileName = fileName.replace('|', '%7C'); //escape url string
+      picUrl = await this.picUploader.uploadImageToS3(picture, fileName);
+    }
+
+    const data: DtoCreateUser = {
+      userId: userParam.userId,
+      ...body,
+      picture: picUrl,
+    };
+    return await this.userService.updateUser(data);
   }
 
   @Get('/:id')
