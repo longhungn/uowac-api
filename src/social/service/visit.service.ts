@@ -115,8 +115,6 @@ export class VisitService {
       .getMany();
 
     return visits;
-
-    return visits;
   }
 
   async getVisitsBySculptureId(sculptureId: string): Promise<Visit[]> {
