@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { CommentService } from '../service/comment.service';
 import { DtoCreateComment } from '../interface/create-comment.dto';
@@ -68,7 +69,18 @@ export class CommentController {
   }
 
   @Delete('/:commentId')
-  async deleteComment(@Param('commentId') commentId: string): Promise<void> {
+  @UseGuards(AuthGuard())
+  async deleteComment(
+    @Param('commentId') commentId: string,
+    @UserParam() user: AuthUser
+  ): Promise<void> {
+    const comment = await this.commentService.getCommentById(commentId);
+    if (
+      comment.userId != user.userId &&
+      !user.scope.includes('delete:all_comment')
+    ) {
+      throw new ForbiddenException('You cannot delete this comment');
+    }
     await this.commentService.deleteComment(commentId);
   }
 }

@@ -57,19 +57,22 @@ export class UserController {
     @UserParam() userParam: AuthUser
   ) {
     const user: User = await this.userService.getUserById(userParam.userId);
-    //check if past profile pic is in S3
-    if (user.picture.includes('amazonaws.com')) {
-      await this.picUploader.deleteImageFromS3url(user.picture);
-    }
+    let picUrl: string = user.picture;
 
-    let picUrl: string = null;
+    //check if a picture file was sent
+    if (picture) {
+      //check if past profile pic is in S3
+      if (user.picture.includes('amazonaws.com')) {
+        await this.picUploader.deleteImageFromS3url(user.picture);
+      }
 
-    if (user.provider === 'auth0') {
-      //Upload new pic
-      //prettier-ignore
-      let fileName = `${user.userId}/${Date.now().toString()}-${picture.originalname}`;
-      fileName = fileName.replace('|', '%7C'); //escape url string
-      picUrl = await this.picUploader.uploadImageToS3(picture, fileName);
+      if (user.provider === 'auth0') {
+        //Upload new pic
+        //prettier-ignore
+        let fileName = `${user.userId}/${Date.now().toString()}-${picture.originalname}`;
+        fileName = fileName.replace('|', '%7C'); //escape url string
+        picUrl = await this.picUploader.uploadImageToS3(picture, fileName);
+      }
     }
 
     const data: DtoCreateUser = {
