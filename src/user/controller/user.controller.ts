@@ -11,6 +11,9 @@ import {
   UseGuards,
   UploadedFile,
   UseInterceptors,
+  BadRequestException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { DtoCreateUser } from '../interface/create-user.dto';
 import { User } from '../entity/user.entity';
@@ -25,6 +28,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { IMulterUploadedFile } from '../../content/interface/multer-uploaded-file.interface';
 import { DtoUpdateUser } from '../interface/update-user.dto';
 import { PictureUploader } from '../../content/service/picture-uploader.service';
+import { AuthManagementApi } from '../../auth/auth-management.service';
 
 @Controller('user')
 export class UserController {
@@ -33,7 +37,10 @@ export class UserController {
     process.env.AWS_S3_PROFILE_PIC_BUCKET_NAME
   );
 
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authManager: AuthManagementApi
+  ) {}
 
   @Get()
   @UseGuards(AuthGuard(), ScopesGuard)
@@ -51,12 +58,20 @@ export class UserController {
   @Patch('me')
   @UseGuards(AuthGuard())
   @UseInterceptors(FileInterceptor('picture'))
+  @UsePipes(new ValidationPipe({ whitelist: true }))
   async updateMyProfile(
     @UploadedFile() picture: IMulterUploadedFile,
     @Body() body: DtoUpdateUser,
     @UserParam() userParam: AuthUser
   ) {
     const user: User = await this.userService.getUserById(userParam.userId);
+
+    if (user.provider != 'auth0') {
+      throw new BadRequestException(
+        'Cannot update user signed in with social account'
+      );
+    }
+
     let picUrl: string = user.picture;
 
     //check if a picture file was sent
@@ -66,14 +81,17 @@ export class UserController {
         await this.picUploader.deleteImageFromS3url(user.picture);
       }
 
-      if (user.provider === 'auth0') {
-        //Upload new pic
-        //prettier-ignore
-        let fileName = `${user.userId}/${Date.now().toString()}-${picture.originalname}`;
-        fileName = fileName.replace('|', '%7C'); //escape url string
-        picUrl = await this.picUploader.uploadImageToS3(picture, fileName);
-      }
+      //Upload new pic
+      //prettier-ignore
+      let fileName = `${user.userId}/${Date.now().toString()}-${picture.originalname}`;
+      fileName = fileName.replace('|', '%7C'); //escape url string
+      picUrl = await this.picUploader.uploadImageToS3(picture, fileName);
     }
+
+    await this.authManager.updateUser(
+      { id: user.userId },
+      { name: body.name, nickname: body.nickname, picture: picUrl }
+    );
 
     const data: DtoCreateUser = {
       userId: userParam.userId,
