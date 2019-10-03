@@ -31,6 +31,8 @@ resourceServers:
         description: delete comments of any user
       - value: "view:all_users"
         description: See list of all users
+      - value: "view:analytics"
+        description: View analytics information
     signing_alg: RS256
     skip_consent_for_verifiable_first_party_clients: true
     token_dialect: access_token_authz
@@ -513,6 +515,8 @@ roles:
       - permission_name: "update:sculpture"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
       - permission_name: "view:all_users"
+        resource_server_identifier: "https://uowac-api.herokuapp.com"
+      - permission_name: "view:analytics"
         resource_server_identifier: "https://uowac-api.herokuapp.com"
 branding: {}
 prompts: {}
