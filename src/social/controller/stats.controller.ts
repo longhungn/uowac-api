@@ -36,4 +36,32 @@ export class StatsController {
     const { fromDate, toDate } = query;
     return await this.statsService.getLikesWithinDateRange(fromDate, toDate);
   }
+
+  @Get('/total/visits')
+  @UseGuards(AuthGuard())
+  async getTotalVisits(): Promise<{}> {
+    const totalVisits = await this.statsService.getTotalVisits();
+    return { totalVisits };
+  }
+
+  @Get('/total/likes')
+  @UseGuards(AuthGuard())
+  async getTotalLikes(): Promise<{}> {
+    const totalLikes = await this.statsService.getTotalLikes();
+    return { totalLikes };
+  }
+
+  @Get('/total/comments')
+  @UseGuards(AuthGuard())
+  async getTotalComments(): Promise<{}> {
+    const totalComments = await this.statsService.getTotalComments();
+    return { totalComments };
+  }
+
+  @Get('/total/users')
+  @UseGuards(AuthGuard())
+  async getTotalUsers(): Promise<{}> {
+    const totalUsers = await this.statsService.getTotalUsers();
+    return { totalUsers };
+  }
 }

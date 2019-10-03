@@ -4,6 +4,7 @@ import { EntityManager, BaseEntity } from 'typeorm';
 import { Visit } from '../entity/visit.entity';
 import { Comment } from '../entity/comment.entity';
 import { Like } from '../entity/like.entity';
+import { User } from '../../user/entity/user.entity';
 const moment = require('moment');
 
 @Injectable()
@@ -144,5 +145,31 @@ export class StatsService {
       'like',
       'likedTime'
     );
+  }
+
+  // Get total
+  async getTotalEntities(entity: any, entityName: string): Promise<number> {
+    const res = await this.manager
+      .createQueryBuilder(entity, entityName)
+      .select(['COUNT(*) AS total'])
+      .getRawOne();
+
+    return res.total;
+  }
+
+  async getTotalVisits(): Promise<number> {
+    return await this.getTotalEntities(Visit, 'visit');
+  }
+
+  async getTotalLikes(): Promise<number> {
+    return await this.getTotalEntities(Like, 'like');
+  }
+
+  async getTotalComments(): Promise<number> {
+    return await this.getTotalEntities(Comment, 'comment');
+  }
+
+  async getTotalUsers(): Promise<number> {
+    return await this.getTotalEntities(User, 'user');
   }
 }
