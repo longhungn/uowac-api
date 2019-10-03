@@ -6,10 +6,23 @@ import { DtoCreateUser } from '../interface/create-user.dto';
 import { UniqueConstraintError } from '../../content/error/unique-constraint.error';
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
 import { AuthManagementApi } from '../../auth/auth-management.service';
+import { UserStats } from '../entity/user-stats.entity';
 
 @Injectable()
 export class UserService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
+
+  async addStatsToUser(user: User) {
+    const stats = await this.manager.findOne(UserStats, {
+      userId: user.userId,
+    });
+
+    const { totalVisits, totalLikes, totalComments } = stats;
+
+    const result = { ...user, totalVisits, totalLikes, totalComments };
+
+    return result;
+  }
 
   async getAllUsers(): Promise<User[]> {
     return await this.manager.find(User, {});

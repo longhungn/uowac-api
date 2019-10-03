@@ -46,7 +46,14 @@ export class UserController {
   @UseGuards(AuthGuard(), ScopesGuard)
   @Scopes('view:all_users')
   async getAllUsers(): Promise<User[]> {
-    return await this.userService.getAllUsers();
+    const users = await this.userService.getAllUsers();
+    const usersWithStats = await Promise.all(
+      users.map(async user => {
+        return await this.userService.addStatsToUser(user);
+      })
+    );
+
+    return usersWithStats;
   }
 
   @Get('me')
@@ -103,7 +110,8 @@ export class UserController {
 
   @Get('/:id')
   async getUserById(@Param('id') id: string): Promise<User> {
-    return await this.userService.getUserById(id);
+    const user = await this.userService.getUserById(id);
+    return await this.userService.addStatsToUser(user);
   }
 
   // @Post()
