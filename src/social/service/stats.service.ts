@@ -11,10 +11,6 @@ const moment = require('moment');
 export class StatsService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
-  // async getTest(): Promise<{}> {
-  //   return { name: 'test' };
-  // }
-
   format(date: string): string {
     return moment(date).format('YYYY-MM-DD');
   }
