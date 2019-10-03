@@ -9,10 +9,7 @@ import { AuthManagementApi } from '../../auth/auth-management.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectEntityManager() private readonly manager: EntityManager,
-    private readonly authManager: AuthManagementApi
-  ) {}
+  constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
   async getAllUsers(): Promise<User[]> {
     return await this.manager.find(User, {});
@@ -53,11 +50,6 @@ export class UserService {
         `User with id ${dtoUpdateUser.userId} does not exist`
       );
     } else {
-      const { name, nickname, picture } = dtoUpdateUser;
-      await this.authManager.updateUser(
-        { id: dtoUpdateUser.userId },
-        { name, nickname, picture }
-      );
       return await this.manager.save(user);
     }
   }

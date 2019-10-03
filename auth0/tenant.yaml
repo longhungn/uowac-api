@@ -202,11 +202,11 @@ databases:
   - name: Username-Password-Authentication
     strategy: auth0
     enabled_clients:
-      - UOW Sculptures
-      - UOWAC Sculpture
       - User sync
-      - auth0-deploy-cli-extension
       - uowac-api (Test Application)
+      - UOW Sculptures
+      - auth0-deploy-cli-extension
+      - UOWAC Sculpture
     is_domain_connection: false
     options:
       mfa:
@@ -263,14 +263,68 @@ databases:
     realms:
       - admin-only
 connections:
+  - name: facebook
+    strategy: facebook
+    enabled_clients:
+      - User sync
+      - uowac-api (Test Application)
+      - UOW Sculptures
+      - auth0-deploy-cli-extension
+      - UOWAC Sculpture
+    is_domain_connection: false
+    options:
+      client_id: ""
+      client_secret: ""
+      email: true
+      public_profile: true
+      groups_access_member_info: false
+      publish_to_groups: false
+      user_age_range: false
+      user_birthday: false
+      user_events: false
+      user_friends: false
+      user_gender: false
+      user_hometown: false
+      user_likes: false
+      user_link: false
+      user_location: false
+      user_photos: false
+      user_posts: false
+      user_tagged_places: false
+      user_videos: false
+      ads_management: false
+      ads_read: false
+      business_management: false
+      leads_retrieval: false
+      manage_pages: false
+      pages_manage_cta: false
+      pages_manage_instant_articles: false
+      pages_show_list: false
+      pages_messaging: false
+      pages_messaging_phone_number: false
+      pages_messaging_subscriptions: false
+      publish_pages: false
+      publish_video: false
+      read_audience_network_insights: false
+      read_insights: false
+      read_page_mailboxes: false
+      manage_notifications: false
+      publish_actions: false
+      read_stream: false
+      read_mailbox: false
+      user_groups: false
+      user_managed_groups: false
+      user_status: false
+      allow_context_profile_field: false
+      scope: "email,public_profile"
   - name: google-oauth2
     strategy: google-oauth2
     enabled_clients:
-      - UOW Sculptures
-      - UOWAC Sculpture
       - User sync
-      - auth0-deploy-cli-extension
       - uowac-api (Test Application)
+      - UOW Sculptures
+      - auth0-deploy-cli-extension
+      - UOWAC Sculpture
     is_domain_connection: false
     options:
       email: true
@@ -310,13 +364,20 @@ connections:
       coordinate: false
       coordinate_readonly: false
 tenant:
+  allowed_logout_urls:
+    - "https://auth.expo.io/@longhungn/auth0-example"
+    - "https://auth.expo.io/@namjose/ExpoUOWS"
+    - "https://auth.expo.io/@aaazureee/ExpoUOWS"
   enabled_locales:
     - en
   flags:
     universal_login: false
     new_universal_login_experience_enabled: false
     disable_clickjack_protection_headers: false
+  friendly_name: UOW Sculptures
   picture_url: "https://i.imgur.com/6m7JBgY.png"
+  support_email: ""
+  support_url: ""
   universal_login:
     colors:
       primary: "#0047BB"
@@ -333,11 +394,6 @@ clientGrants:
   - client_id: UOW Sculptures
     audience: "https://uowac-api.herokuapp.com"
     scope: []
-  - client_id: User sync
-    audience: "https://uowac-api.herokuapp.com"
-    scope:
-      - "create:user"
-      - "update:user"
   - client_id: User sync
     audience: "https://##AUTH0_DOMAIN##/api/v2/"
     scope:
@@ -423,6 +479,11 @@ clientGrants:
       - "update:prompts"
       - "read:branding"
       - "update:branding"
+  - client_id: User sync
+    audience: "https://uowac-api.herokuapp.com"
+    scope:
+      - "create:user"
+      - "update:user"
   - client_id: uowac-api (Test Application)
     audience: "https://uowac-api.herokuapp.com"
     scope: []

@@ -44,7 +44,7 @@ function (user, context, callback) {
         userId: user.user_id,
         nickname: user.nickname,
         name: user.name,
-        picture: user.picture,
+        picture: user.picture_large || user.picture,
         role: assignedRoles,
         email: user.email,
         givenName: user.given_name,
