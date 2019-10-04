@@ -176,6 +176,22 @@ export class StatsService {
     );
   }
 
+  // USER Stats
+  async getUsersWithinDateRange(fromDate: string, toDate: string): Promise<{}> {
+    const { validFromDate, validToDate } = await this.validRangeDate(
+      fromDate,
+      toDate
+    );
+
+    return await this.retrieveStatsWithinDateRange(
+      validFromDate,
+      validToDate,
+      User,
+      'user',
+      'joinDate'
+    );
+  }
+
   // Get total
   async getTotalEntities(entity: any, entityName: string): Promise<number> {
     const res = await this.manager
