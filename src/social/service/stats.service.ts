@@ -1,10 +1,15 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager, BaseEntity } from 'typeorm';
 import { Visit } from '../entity/visit.entity';
 import { Comment } from '../entity/comment.entity';
 import { Like } from '../entity/like.entity';
 import { User } from '../../user/entity/user.entity';
+import { Sculpture } from '../../content/entity/sculpture.entity';
 const moment = require('moment');
 
 @Injectable()
@@ -51,21 +56,40 @@ export class StatsService {
     validToDate: string,
     entity: any,
     entityName: string,
-    entityTimeColumn: string
+    entityTimeColumn: string,
+    sculptureId?: string
   ): Promise<{}> {
     // get all entities between fromDate and toDate
 
     const castDate = `CAST("${entityName}"."${entityTimeColumn}" AS DATE)`;
 
-    let validEntities = await this.manager
+    let query = await this.manager
       .createQueryBuilder(entity, entityName)
       .select([castDate + ` AS "date"`, `COUNT(*) AS "amount"`])
       .where(castDate + ` between :validFromDate and :validToDate`, {
         validFromDate,
         validToDate,
       })
-      .groupBy(castDate)
-      .getRawMany();
+      .groupBy(castDate);
+
+    if (sculptureId) {
+      const sculpture = await this.manager.findOne(Sculpture, {
+        accessionId: sculptureId,
+      });
+
+      if (!sculpture) {
+        throw new NotFoundException(
+          `There is not sculpture with id ${sculptureId}`
+        );
+      }
+
+      query = await query.andWhere(
+        `"${entityName}"."sculptureId" = :sculptureId`,
+        { sculptureId }
+      );
+    }
+
+    let validEntities = await query.getRawMany();
 
     // format retrieved entities to format {date: amount}
     let formatEntities = {};
@@ -92,7 +116,8 @@ export class StatsService {
   // VISITS Stats
   async getVisitsWithinDateRange(
     fromDate: string,
-    toDate: string
+    toDate: string,
+    sculptureId?: string
   ): Promise<{}> {
     const { validFromDate, validToDate } = await this.validRangeDate(
       fromDate,
@@ -104,14 +129,16 @@ export class StatsService {
       validToDate,
       Visit,
       'visit',
-      'visitTime'
+      'visitTime',
+      sculptureId
     );
   }
 
   // COMMENTS Stats
   async getCommentsWithinDateRange(
     fromDate: string,
-    toDate: string
+    toDate: string,
+    sculptureId?: string
   ): Promise<{}> {
     const { validFromDate, validToDate } = await this.validRangeDate(
       fromDate,
@@ -123,12 +150,17 @@ export class StatsService {
       validToDate,
       Comment,
       'comment',
-      'createdTime'
+      'updatedTime',
+      sculptureId
     );
   }
 
   // LIKES Stats
-  async getLikesWithinDateRange(fromDate: string, toDate: string): Promise<{}> {
+  async getLikesWithinDateRange(
+    fromDate: string,
+    toDate: string,
+    sculptureId?: string
+  ): Promise<{}> {
     const { validFromDate, validToDate } = await this.validRangeDate(
       fromDate,
       toDate
@@ -139,7 +171,24 @@ export class StatsService {
       validToDate,
       Like,
       'like',
-      'likedTime'
+      'likedTime',
+      sculptureId
+    );
+  }
+
+  // USER Stats
+  async getUsersWithinDateRange(fromDate: string, toDate: string): Promise<{}> {
+    const { validFromDate, validToDate } = await this.validRangeDate(
+      fromDate,
+      toDate
+    );
+
+    return await this.retrieveStatsWithinDateRange(
+      validFromDate,
+      validToDate,
+      User,
+      'user',
+      'joinDate'
     );
   }
 
