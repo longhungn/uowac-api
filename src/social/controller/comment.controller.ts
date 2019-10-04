@@ -34,6 +34,11 @@ export class CommentController {
     );
   }
 
+  @Get('/')
+  async getAllComments(): Promise<Comment[]> {
+    return await this.commentService.getAllComments();
+  }
+
   @Get('/:commentId')
   async getCommentById(
     @Param('commentId') commentId: string

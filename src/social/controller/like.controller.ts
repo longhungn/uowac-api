@@ -30,6 +30,11 @@ export class LikeController {
     );
   }
 
+  @Get('/')
+  async getAllLikes(): Promise<Like[]> {
+    return await this.likeService.getAllLikes();
+  }
+
   @Get('/:likeId')
   async getLikeById(@Param('likeId') likeId: string): Promise<Like> {
     return await this.likeService.getLikeById(likeId);

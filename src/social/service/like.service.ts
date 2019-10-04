@@ -91,10 +91,8 @@ export class LikeService {
     return like;
   }
 
-  async getLikesByUserId(userId: string): Promise<Like[]> {
-    await this.verifyUserExistence(userId);
-
-    const likes = await this.manager
+  async likeQueryBuilder() {
+    const query = await this.manager
       .createQueryBuilder(Like, 'like')
       .select('like')
       .addSelect([
@@ -107,7 +105,23 @@ export class LikeService {
       ])
       .leftJoin('like.user', 'user')
       .leftJoin('like.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image');
+
+    return query;
+  }
+
+  async getAllLikes(): Promise<Like[]> {
+    const query = await this.likeQueryBuilder();
+    const likes = await query.getMany();
+
+    return likes;
+  }
+
+  async getLikesByUserId(userId: string): Promise<Like[]> {
+    await this.verifyUserExistence(userId);
+
+    const query = await this.likeQueryBuilder();
+    const likes = await query
       .where('like.userId = :userId', { userId })
       .getMany();
 
@@ -117,20 +131,8 @@ export class LikeService {
   async getLikesBySculptureId(sculptureId: string): Promise<Like[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const likes = await this.manager
-      .createQueryBuilder(Like, 'like')
-      .select('like')
-      .addSelect([
-        'user.userId',
-        'user.picture',
-        'user.name',
-        'user.nickname',
-        'sculpture.accessionId',
-        'sculpture.name',
-      ])
-      .leftJoin('like.user', 'user')
-      .leftJoin('like.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+    const query = await this.likeQueryBuilder();
+    const likes = await query
       .where('like.sculptureId = :sculptureId', { sculptureId })
       .getMany();
 

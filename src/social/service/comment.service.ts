@@ -88,10 +88,8 @@ export class CommentService {
     return comment;
   }
 
-  async getCommentsByUserId(userId: string): Promise<Comment[]> {
-    await this.verifyUserExistence(userId);
-
-    const comments = await this.manager
+  async commentQueryBuilder() {
+    const query = await this.manager
       .createQueryBuilder(Comment, 'comment')
       .select([
         'comment.content',
@@ -109,7 +107,23 @@ export class CommentService {
       ])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image');
+
+    return query;
+  }
+
+  async getAllComments(): Promise<Comment[]> {
+    const query = await this.commentQueryBuilder();
+    const comments = await query.getMany();
+
+    return comments;
+  }
+
+  async getCommentsByUserId(userId: string): Promise<Comment[]> {
+    await this.verifyUserExistence(userId);
+
+    const query = await this.commentQueryBuilder();
+    const comments = await query
       .where('comment.userId = :userId', { userId })
       .getMany();
 
@@ -119,25 +133,8 @@ export class CommentService {
   async getCommentsBySculptureId(sculptureId: string): Promise<Comment[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const comments = await this.manager
-      .createQueryBuilder(Comment, 'comment')
-      .select([
-        'comment.content',
-        'comment.commentId',
-        'comment.createdTime',
-        'comment.updatedTime',
-      ])
-      .addSelect([
-        'user.userId',
-        'user.picture',
-        'user.name',
-        'user.nickname',
-        'sculpture.accessionId',
-        'sculpture.name',
-      ])
-      .leftJoin('comment.user', 'user')
-      .leftJoin('comment.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+    const query = await this.commentQueryBuilder();
+    const comments = query
       .where('comment.sculptureId = :sculptureId', { sculptureId })
       .getMany();
     return comments;

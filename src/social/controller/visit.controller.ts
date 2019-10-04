@@ -30,6 +30,11 @@ export class VisitController {
     );
   }
 
+  @Get('/')
+  async getAllVisits(): Promise<Visit[]> {
+    return await this.visitService.getAllVisits();
+  }
+
   @Get('/:visitId')
   async getVisitById(@Param('visitId') visitId: string): Promise<Visit> {
     return await this.visitService.getVisitById(visitId);

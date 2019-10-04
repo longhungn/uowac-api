@@ -94,10 +94,8 @@ export class VisitService {
     return visit;
   }
 
-  async getVisitsByUserId(userId: string): Promise<Visit[]> {
-    await this.verifyUserExistence(userId);
-
-    const visits = await this.manager
+  async visitQueryBuilder() {
+    const query = await this.manager
       .createQueryBuilder(Visit, 'visit')
       .select('visit')
       .addSelect([
@@ -110,9 +108,23 @@ export class VisitService {
       ])
       .leftJoin('visit.user', 'user')
       .leftJoin('visit.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
-      .where('visit.userId = :userId', { userId })
-      .getMany();
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image');
+
+    return query;
+  }
+
+  async getAllVisits(): Promise<Visit[]> {
+    const query = await this.visitQueryBuilder();
+    const visits = query.getMany();
+
+    return visits;
+  }
+
+  async getVisitsByUserId(userId: string): Promise<Visit[]> {
+    await this.verifyUserExistence(userId);
+
+    const query = await this.visitQueryBuilder();
+    const visits = query.where('visit.userId = :userId', { userId }).getMany();
 
     return visits;
   }
@@ -120,20 +132,8 @@ export class VisitService {
   async getVisitsBySculptureId(sculptureId: string): Promise<Visit[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const visits = await this.manager
-      .createQueryBuilder(Visit, 'visit')
-      .select('visit')
-      .addSelect([
-        'user.userId',
-        'user.picture',
-        'user.name',
-        'user.nickname',
-        'sculpture.accessionId',
-        'sculpture.name',
-      ])
-      .leftJoin('visit.user', 'user')
-      .leftJoin('visit.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+    const query = await this.visitQueryBuilder();
+    const visits = query
       .where('visit.sculptureId = :sculptureId', { sculptureId })
       .getMany();
 
