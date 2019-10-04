@@ -13,6 +13,8 @@ import { Like } from '../entity/like.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserParam } from '../../auth/user.decorator';
 import { AuthUser } from '../../auth/auth-user.interface';
+import { ScopesGuard } from '../../auth/scopes.guard';
+import { Scopes } from '../../auth/scopes.decorator';
 
 @Controller('like')
 export class LikeController {
@@ -31,6 +33,8 @@ export class LikeController {
   }
 
   @Get('/')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
   async getAllLikes(): Promise<Like[]> {
     return await this.likeService.getAllLikes();
   }
