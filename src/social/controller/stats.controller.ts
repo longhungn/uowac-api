@@ -89,8 +89,8 @@ export class StatsController {
 
   // User Stats
   @Get('/users')
-  // @UseGuards(AuthGuard(), ScopesGuard)
-  // @Scopes('view:analytics')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
   async getUsersWithinDateRange(@Query() query): Promise<{}> {
     const { fromDate, toDate } = query;
     return await this.statsService.getUsersWithinDateRange(fromDate, toDate);
