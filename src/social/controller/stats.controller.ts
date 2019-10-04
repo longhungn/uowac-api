@@ -24,7 +24,7 @@ export class StatsController {
     return await this.statsService.getVisitsWithinDateRange(fromDate, toDate);
   }
 
-  @Get('/visits/:sculptureId')
+  @Get('/visits/sculpture-id/:sculptureId')
   @UseGuards(AuthGuard(), ScopesGuard)
   @Scopes('view:analytics')
   async getVisitsWithinDateRangeForSculptureId(
@@ -48,7 +48,7 @@ export class StatsController {
     return await this.statsService.getCommentsWithinDateRange(fromDate, toDate);
   }
 
-  @Get('/comments/:sculptureId')
+  @Get('/comments/sculpture-id/:sculptureId')
   @UseGuards(AuthGuard(), ScopesGuard)
   @Scopes('view:analytics')
   async getCommentsWithinDateRangeForSculptureId(
@@ -72,7 +72,7 @@ export class StatsController {
     return await this.statsService.getLikesWithinDateRange(fromDate, toDate);
   }
 
-  @Get('/likes/:sculptureId')
+  @Get('/likes/sculpture-id/:sculptureId')
   @UseGuards(AuthGuard(), ScopesGuard)
   @Scopes('view:analytics')
   async getLikesWithinDateRangeForSculptureId(
