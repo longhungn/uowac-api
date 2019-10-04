@@ -4,6 +4,7 @@ import {
   Query,
   BadRequestException,
   UseGuards,
+  Param,
 } from '@nestjs/common';
 import { StatsService } from '../service/stats.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,6 +23,21 @@ export class StatsController {
     return await this.statsService.getVisitsWithinDateRange(fromDate, toDate);
   }
 
+  @Get('/visits/:sculptureId')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
+  async getVisitsWithinDateRangeForSculptureId(
+    @Query() query,
+    @Param('sculptureId') sculptureId: string
+  ): Promise<{}> {
+    const { fromDate, toDate } = query;
+    return await this.statsService.getVisitsWithinDateRange(
+      fromDate,
+      toDate,
+      sculptureId
+    );
+  }
+
   @Get('/comments')
   @UseGuards(AuthGuard(), ScopesGuard)
   @Scopes('view:analytics')
@@ -30,12 +46,42 @@ export class StatsController {
     return await this.statsService.getCommentsWithinDateRange(fromDate, toDate);
   }
 
+  @Get('/comments/:sculptureId')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
+  async getCommentsWithinDateRangeForSculptureId(
+    @Query() query,
+    @Param('sculptureId') sculptureId: string
+  ): Promise<{}> {
+    const { fromDate, toDate } = query;
+    return await this.statsService.getCommentsWithinDateRange(
+      fromDate,
+      toDate,
+      sculptureId
+    );
+  }
+
   @Get('/likes')
   @UseGuards(AuthGuard(), ScopesGuard)
   @Scopes('view:analytics')
   async getLikesWithinDateRange(@Query() query): Promise<{}> {
     const { fromDate, toDate } = query;
     return await this.statsService.getLikesWithinDateRange(fromDate, toDate);
+  }
+
+  @Get('/likes/:sculptureId')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
+  async getLikesWithinDateRangeForSculptureId(
+    @Query() query,
+    @Param('sculptureId') sculptureId: string
+  ): Promise<{}> {
+    const { fromDate, toDate } = query;
+    return await this.statsService.getLikesWithinDateRange(
+      fromDate,
+      toDate,
+      sculptureId
+    );
   }
 
   @Get('/total/visits')
