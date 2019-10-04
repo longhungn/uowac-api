@@ -13,6 +13,8 @@ import { Visit } from '../entity/visit.entity';
 import { UserParam } from '../../auth/user.decorator';
 import { AuthUser } from '../../auth/auth-user.interface';
 import { AuthGuard } from '@nestjs/passport';
+import { ScopesGuard } from '../../auth/scopes.guard';
+import { Scopes } from '../../auth/scopes.decorator';
 
 @Controller('visit')
 export class VisitController {
@@ -28,6 +30,13 @@ export class VisitController {
       user.userId,
       dtoCreateVisit.sculptureId
     );
+  }
+
+  @Get('/')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
+  async getAllVisits(): Promise<Visit[]> {
+    return await this.visitService.getAllVisits();
   }
 
   @Get('/:visitId')

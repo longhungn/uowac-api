@@ -16,6 +16,8 @@ import { DtoUpdateComment } from '../interface/update-comment.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserParam } from '../../auth/user.decorator';
 import { AuthUser } from '../../auth/auth-user.interface';
+import { ScopesGuard } from '../../auth/scopes.guard';
+import { Scopes } from '../../auth/scopes.decorator';
 
 @Controller('comment')
 export class CommentController {
@@ -32,6 +34,13 @@ export class CommentController {
       data.sculptureId,
       data.content
     );
+  }
+
+  @Get('/')
+  @UseGuards(AuthGuard(), ScopesGuard)
+  @Scopes('view:analytics')
+  async getAllComments(): Promise<Comment[]> {
+    return await this.commentService.getAllComments();
   }
 
   @Get('/:commentId')
