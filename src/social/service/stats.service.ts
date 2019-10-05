@@ -150,7 +150,7 @@ export class StatsService {
       validToDate,
       Comment,
       'comment',
-      'updatedTime',
+      'createdTime',
       sculptureId
     );
   }
