@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Sculpture } from './sculpture.entity';
 
@@ -29,4 +30,7 @@ export class SculptureImage {
   sculpture: Sculpture;
   @Column({ nullable: true }) //for many to one relation
   sculptureId: string;
+
+  @CreateDateColumn()
+  created: Date;
 }
