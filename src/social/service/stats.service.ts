@@ -61,7 +61,7 @@ export class StatsService {
   ): Promise<{}> {
     // get all entities between fromDate and toDate
 
-    const castDate = `CAST(("${entityName}"."${entityTimeColumn}" AT TIME ZONE 'UTC') AT TIME ZONE 'AEST' AS DATE)`;
+    const castDate = `CAST(("${entityName}"."${entityTimeColumn}") AS DATE)`;
 
     let query = await this.manager
       .createQueryBuilder(entity, entityName)
