@@ -1,11 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import {
-  EntityManager,
-  Timestamp,
-  SelectQueryBuilder,
-  ObjectLiteral,
-} from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { Comment } from '../entity/comment.entity';
 import { DtoCreateComment } from '../interface/create-comment.dto';
 import { User } from '../../user/entity/user.entity';
@@ -13,6 +8,7 @@ import { Sculpture } from '../../content/entity/sculpture.entity';
 import { DtoUpdateComment } from '../interface/update-comment.dto';
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
 import { SculptureImage } from '../../content/entity/image.entity';
+import { DtoPagination } from '../interface/pagination.dto';
 
 @Injectable()
 export class CommentService {
@@ -88,8 +84,8 @@ export class CommentService {
     return comment;
   }
 
-  async commentQueryBuilder() {
-    const query = await this.manager
+  async commentQueryBuilder(pagination?: DtoPagination) {
+    let query = await this.manager
       .createQueryBuilder(Comment, 'comment')
       .select([
         'comment.content',
@@ -107,8 +103,36 @@ export class CommentService {
       ])
       .leftJoin('comment.user', 'user')
       .leftJoin('comment.sculpture', 'sculpture')
-      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image');
+      .leftJoinAndMapMany('sculpture.images', 'sculpture.images', 'image')
+      .orderBy('comment.createdTime', 'DESC');
 
+    if (pagination) {
+      const { after, before, limit } = pagination;
+
+      // add offset if offset was specified
+      if (after) {
+        query = query
+          .where(
+            '(comment.createdTime, comment.commentId) < (SELECT "createdTime", "commentId" FROM "comment" WHERE "commentId" = :lastId)',
+            { lastId: after }
+          )
+          .orderBy('comment.createdTime', 'DESC')
+          .addOrderBy('comment.commentId', 'DESC');
+      } else if (before) {
+        query = query
+          .where(
+            '(comment.createdTime, comment.commentId) > (SELECT "createdTime", "commentId" FROM "comment" WHERE "commentId" = :lastId)',
+            { lastId: before }
+          )
+          .orderBy('comment.createdTime', 'ASC')
+          .addOrderBy('comment.commentId', 'ASC');
+      }
+
+      //add limit if limit was specified
+      if (limit) {
+        query = query.take(limit);
+      }
+    }
     return query;
   }
 
@@ -119,24 +143,33 @@ export class CommentService {
     return comments;
   }
 
-  async getCommentsByUserId(userId: string): Promise<Comment[]> {
+  async getCommentsByUserId(
+    userId: string,
+    pagination?: DtoPagination
+  ): Promise<Comment[]> {
     await this.verifyUserExistence(userId);
 
-    const query = await this.commentQueryBuilder();
+    const query = await this.commentQueryBuilder(pagination);
     const comments = await query
-      .where('comment.userId = :userId', { userId })
+      .andWhere('comment.userId = :userId', { userId })
       .getMany();
 
     return comments;
   }
 
-  async getCommentsBySculptureId(sculptureId: string): Promise<Comment[]> {
+  async getCommentsBySculptureId(
+    sculptureId: string,
+    pagination?: DtoPagination
+  ): Promise<Comment[]> {
     await this.verifySculptureExistence(sculptureId);
 
-    const query = await this.commentQueryBuilder();
-    const comments = query
-      .where('comment.sculptureId = :sculptureId', { sculptureId })
-      .getMany();
+    //filter comments for this sculpture only
+    let query = await this.commentQueryBuilder(pagination);
+    query = query.andWhere('comment.sculptureId = :sculptureId', {
+      sculptureId,
+    });
+
+    let comments = await query.getMany(); //retrieve results
     return comments;
   }
 

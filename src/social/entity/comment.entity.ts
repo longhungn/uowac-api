@@ -37,11 +37,11 @@ export class Comment {
   @Column()
   sculptureId: string;
 
-  @CreateDateColumn()
-  createdTime: string;
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdTime: Date;
 
-  @UpdateDateColumn()
-  updatedTime: string;
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedTime: Date;
 
   @Column()
   content: string;

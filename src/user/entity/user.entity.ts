@@ -44,7 +44,7 @@ export class User {
   @Column({ nullable: true })
   provider: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   joinDate: Date;
 
   @OneToMany(type => Comment, comment => comment.user)

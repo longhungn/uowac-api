@@ -32,6 +32,6 @@ export class Visit {
   @Column()
   sculptureId: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   visitTime: string;
 }

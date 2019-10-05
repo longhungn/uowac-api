@@ -32,6 +32,6 @@ export class Like {
   @Column()
   sculptureId: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   likedTime: string;
 }

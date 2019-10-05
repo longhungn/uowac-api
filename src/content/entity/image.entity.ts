@@ -31,6 +31,6 @@ export class SculptureImage {
   @Column({ nullable: true }) //for many to one relation
   sculptureId: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   created: Date;
 }

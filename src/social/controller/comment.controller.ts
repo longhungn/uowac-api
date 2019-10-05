@@ -8,6 +8,9 @@ import {
   Delete,
   UseGuards,
   ForbiddenException,
+  UsePipes,
+  ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { CommentService } from '../service/comment.service';
 import { DtoCreateComment } from '../interface/create-comment.dto';
@@ -18,8 +21,10 @@ import { UserParam } from '../../auth/user.decorator';
 import { AuthUser } from '../../auth/auth-user.interface';
 import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
+import { DtoPagination } from '../interface/pagination.dto';
 
 @Controller('comment')
+@UsePipes(new ValidationPipe({ whitelist: true }))
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
@@ -52,16 +57,21 @@ export class CommentController {
 
   @Get('/sculpture-id/:sculptureId')
   async getCommentsBySculptureId(
-    @Param('sculptureId') sculptureId: string
+    @Param('sculptureId') sculptureId: string,
+    @Query() query: DtoPagination //will ignore `before` if `after` is specified
   ): Promise<Comment[]> {
-    return await this.commentService.getCommentsBySculptureId(sculptureId);
+    return await this.commentService.getCommentsBySculptureId(
+      sculptureId,
+      query
+    );
   }
 
   @Get('/user-id/:userId')
   async getCommentsByUserId(
-    @Param('userId') userId: string
+    @Param('userId') userId: string,
+    @Query() query: DtoPagination
   ): Promise<Comment[]> {
-    return await this.commentService.getCommentsByUserId(userId);
+    return await this.commentService.getCommentsByUserId(userId, query);
   }
 
   @Patch()
