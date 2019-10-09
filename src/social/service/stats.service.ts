@@ -61,7 +61,9 @@ export class StatsService {
   ): Promise<{}> {
     // get all entities between fromDate and toDate
 
-    const castDate = `CAST(("${entityName}"."${entityTimeColumn}" AT '${process.env.TZ || 'AEST'}') AS DATE)`;
+    //prettier-ignore
+    const castDate = 
+      `CAST(("${entityName}"."${entityTimeColumn}" AT TIME ZONE '${process.env.TZ || 'AEST'}') AS DATE)`;
 
     let query = await this.manager
       .createQueryBuilder(entity, entityName)
