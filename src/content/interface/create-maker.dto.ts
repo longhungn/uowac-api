@@ -4,11 +4,13 @@ import {
   IsOptional,
   IsInt,
   IsAlpha,
+  IsUrl,
 } from 'class-validator';
 
 export class DtoCreateMaker {
+  @IsOptional()
   @IsAlphanumeric()
-  code: string;
+  code?: string;
 
   @IsString()
   firstName: string;
@@ -18,17 +20,21 @@ export class DtoCreateMaker {
 
   @IsOptional()
   @IsInt()
-  birthYear: number;
+  birthYear?: number;
 
   @IsOptional()
   @IsInt()
-  deathYear: number;
+  deathYear?: number;
 
   @IsOptional()
   @IsString()
-  info: string; //short description
+  info?: string; //short description
 
   @IsOptional()
   @IsAlpha()
-  nationality: string;
+  nationality?: string;
+
+  @IsOptional()
+  @IsUrl()
+  wikiUrl?: string;
 }

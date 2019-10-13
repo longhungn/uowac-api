@@ -1,8 +1,13 @@
 language: node_js
 node_js:
   - 10.15.3
+services:
+  - postgresql
+before_script:
+  - psql -c "CREATE DATABASE uowac_test;" -U postgres
+  - psql -c "CREATE USER test WITH PASSWORD 'test';" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON DATABASE uowac_test to test;" -U postgres
 script:
-  - "npm run build"
   - "npm run test"
 branches:
   only:
