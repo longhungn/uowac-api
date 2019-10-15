@@ -11,4 +11,7 @@ export class MockEntityManager {
       return Object.assign(new type(), target, src);
     });
   findOneOrFail = jest.fn();
+  remove = jest.fn();
+  count = jest.fn();
+  preload = jest.fn();
 }
