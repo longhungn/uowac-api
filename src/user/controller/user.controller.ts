@@ -33,14 +33,14 @@ import { AuthManagementApi } from '../../auth/auth-management.service';
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger(UserController.name);
-  private readonly picUploader = new PictureUploader(
-    process.env.AWS_S3_PROFILE_PIC_BUCKET_NAME
-  );
 
   constructor(
     private readonly userService: UserService,
-    private readonly authManager: AuthManagementApi
-  ) {}
+    private readonly authManager: AuthManagementApi,
+    private readonly picUploader: PictureUploader
+  ) {
+    this.picUploader.setBucketName(process.env.AWS_S3_PROFILE_PIC_BUCKET_NAME);
+  }
 
   @Get()
   @UseGuards(AuthGuard(), ScopesGuard)

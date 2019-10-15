@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 import { IMulterUploadedFile } from '../interface/multer-uploaded-file.interface';
 require('dotenv').config();
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class PictureUploader {
   public AWS_S3_BUCKET_NAME: string;
   public s3: S3;
 
-  constructor(readonly bucketName) {
+  constructor() {
     this.s3 = new S3({
       apiVersion: '2006-03-01',
       region: process.env.AWS_REGION,
@@ -17,7 +17,9 @@ export class PictureUploader {
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
     });
+  }
 
+  setBucketName(bucketName: string) {
     this.AWS_S3_BUCKET_NAME = bucketName;
   }
 
