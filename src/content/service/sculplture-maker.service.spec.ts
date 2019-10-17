@@ -1,4 +1,5 @@
 /**
+ * Test suite for SculptureMakerService
  * Created by: Long Hung Nguyen (longhungn)
  */
 import { SculptureMakerService } from './sculpture-maker.service';
@@ -145,7 +146,7 @@ describe('SculptureMakerService', () => {
     });
   });
 
-  describe('getMakerById', async () => {
+  describe('getMakerById', () => {
     it('should throw when maker does not exist', async () => {
       mockEntityManager.findOne.mockResolvedValue(null);
 

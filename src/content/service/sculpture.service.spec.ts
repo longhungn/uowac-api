@@ -1,4 +1,5 @@
 /**
+ * Test suite for SculptureService
  * Created by: Long Hung Nguyen (longhungn)
  */
 import { SculptureService } from './sculpture.service';
