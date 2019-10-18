@@ -76,7 +76,6 @@ describe('SculptureImageService', () => {
         }
       );
 
-      console.log('hey');
       const res = await service.insertPicture(
         sculptureObj.accessionId,
         imageFile

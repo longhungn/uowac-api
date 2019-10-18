@@ -9,7 +9,6 @@ import { Sculpture } from '../entity/sculpture.entity';
 import { TestingModule, Test } from '@nestjs/testing';
 import { EntityManager } from 'typeorm';
 import { UniqueConstraintError } from '../error/unique-constraint.error';
-import { rejects } from 'assert';
 import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
 import { SculptureImageService } from './image.service';
 import * as faker from 'faker';
