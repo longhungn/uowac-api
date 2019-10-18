@@ -11,6 +11,8 @@ import { EntityManager } from 'typeorm';
 import { UniqueConstraintError } from '../error/unique-constraint.error';
 import { rejects } from 'assert';
 import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
+import { SculptureImageService } from './image.service';
+import * as faker from 'faker';
 
 let getRandomSculptureDto = () => {
   const dto: DtoCreateSculpture = {
@@ -29,16 +31,24 @@ let getRandomSculptureDto = () => {
 };
 
 let dtoToSculpture = (dto: DtoCreateSculpture) => {
-  let maker = Object.assign(new Sculpture(), dto);
-  return maker;
+  let sculpture = Object.assign(new Sculpture(), dto);
+  sculpture.images = [];
+  return sculpture;
 };
 
 describe('SculptureService', () => {
   let service: SculptureService;
   let mockEntityManager: MockEntityManager;
+  let mockImageService: SculptureImageService;
 
   beforeEach(async () => {
     mockEntityManager = new MockEntityManager();
+
+    mockImageService = new SculptureImageService(null, {
+      setBucketName: jest.fn(),
+    } as any);
+    mockImageService.deletePicture = jest.fn();
+    mockImageService.insertPicture = jest.fn();
 
     const app: TestingModule = await Test.createTestingModule({
       providers: [
@@ -46,6 +56,10 @@ describe('SculptureService', () => {
         {
           provide: EntityManager,
           useValue: mockEntityManager,
+        },
+        {
+          provide: SculptureImageService,
+          useValue: mockImageService,
         },
       ],
     }).compile();
@@ -118,6 +132,47 @@ describe('SculptureService', () => {
       mockEntityManager.findOne.mockResolvedValue(sculpture);
 
       await service.deleteSculpture(sculpture.accessionId);
+
+      expect(mockEntityManager.remove).toBeCalledWith(sculpture);
+    });
+
+    it('remove the images before deleting sculpture', async () => {
+      let dto = getRandomSculptureDto();
+      let sculpture = dtoToSculpture(dto);
+      sculpture.images = [
+        {
+          created: new Date(),
+          id: faker.random.uuid(),
+          url: 'https://test-buck.amazonaws.com/2019.01/pic.png',
+          s3bucket: 'test-buck',
+          s3key: '2019.01/pic.png',
+          sculpture: sculpture,
+          sculptureId: sculpture.accessionId,
+        },
+        {
+          created: new Date(),
+          id: faker.random.uuid(),
+          url: 'https://test-buck.amazonaws.com/2019.01/pic2.png',
+          s3bucket: 'test-buck',
+          s3key: '2019.01/pic2.png',
+          sculpture: sculpture,
+          sculptureId: sculpture.accessionId,
+        },
+      ];
+
+      mockEntityManager.findOne.mockResolvedValue(sculpture);
+
+      await service.deleteSculpture(sculpture.accessionId);
+
+      expect(mockImageService.deletePicture).toBeCalledTimes(2);
+      expect(mockImageService.deletePicture).toHaveBeenNthCalledWith(
+        1,
+        sculpture.images[0].id
+      );
+      expect(mockImageService.deletePicture).toHaveBeenNthCalledWith(
+        2,
+        sculpture.images[1].id
+      );
 
       expect(mockEntityManager.remove).toBeCalledWith(sculpture);
     });
