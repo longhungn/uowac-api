@@ -11,6 +11,12 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   imports: [AuthModule],
   controllers: [SculptureController, MakerController, SculptureImageController],
-  providers: [SculptureService, SculptureMakerService, SculptureImageService],
+  providers: [
+    SculptureService,
+    SculptureMakerService,
+    SculptureImageService,
+    PictureUploader,
+  ],
+  exports: [PictureUploader],
 })
 export class ContentModule {}

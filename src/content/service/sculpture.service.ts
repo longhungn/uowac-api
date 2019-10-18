@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager, DeleteResult } from 'typeorm';
 import { Sculpture } from '../entity/sculpture.entity';
@@ -8,10 +12,16 @@ import { DtoCreateSculpture } from '../interface/create-sculpture.dto';
 import { UniqueConstraintError } from '../error/unique-constraint.error';
 import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
 import { SculptureStats } from '../entity/sculpture-stats.entity';
+import { SculptureImageService } from './image.service';
 
 @Injectable()
 export class SculptureService {
-  constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
+  logger = new Logger(SculptureService.name);
+
+  constructor(
+    @InjectEntityManager() private readonly manager: EntityManager,
+    private readonly imageService: SculptureImageService
+  ) {}
 
   async addStatsToSculpture(sculpture: Sculpture) {
     const stats = await this.manager.findOne(SculptureStats, {
@@ -102,13 +112,26 @@ export class SculptureService {
       where: {
         accessionId,
       },
+      relations: ['images'],
     });
     if (!sculpture) {
       throw new EntityDoesNotExistError(
         'There is no sculpture with this accessionId: ' + accessionId
       );
     } else {
-      await this.manager.remove(sculpture);
+      //delete all images first
+      try {
+        await Promise.all(
+          sculpture.images.map(img => this.imageService.deletePicture(img.id))
+        );
+        await this.manager.remove(sculpture);
+      } catch (e) {
+        const msg = `Failed to delete sculpture images while deleting sculpture ${
+          sculpture.accessionId
+        }`;
+        this.logger.error(msg);
+        throw new InternalServerErrorException(msg);
+      }
     }
   }
 }

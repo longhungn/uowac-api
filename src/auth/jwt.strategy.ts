@@ -28,8 +28,6 @@ export class JwtStrategy extends PassportStrategy(PassportJwtStrategy) {
 
   //return the request.user object
   async validate(payload: any): Promise<AuthUser> {
-    console.log(payload);
-
     return {
       userId: payload.sub,
       scope: payload.scope,

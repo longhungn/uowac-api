@@ -9,11 +9,13 @@ import { PictureUploader } from './picture-uploader.service';
 @Injectable()
 export class SculptureImageService {
   private readonly logger = new Logger(SculptureImageService.name);
-  private readonly uploader = new PictureUploader(
-    process.env.AWS_S3_PICTURE_BUCKET_NAME
-  );
 
-  constructor(private readonly manager: EntityManager) {}
+  constructor(
+    private readonly manager: EntityManager,
+    private readonly uploader: PictureUploader
+  ) {
+    uploader.setBucketName(process.env.AWS_S3_PICTURE_BUCKET_NAME);
+  }
 
   //Overload
   async insertPicture(
@@ -38,7 +40,10 @@ export class SculptureImageService {
     }
 
     try {
-      const sculpture = this.manager.findOneOrFail(Sculpture, accessionId);
+      const sculpture = await this.manager.findOneOrFail(
+        Sculpture,
+        accessionId
+      );
     } catch (e) {
       this.logger.error(e.toString());
       throw new EntityDoesNotExistError('Could not find specified sculpture');
