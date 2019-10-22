@@ -9,7 +9,12 @@ import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 import { DtoCreateLike } from '../interface/create-like.dto';
 import { Like } from '../entity/like.entity';
-
+/**
+ * Service class to handle logic for creating, reading,
+ * and deleting likes
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Injectable()
 export class LikeService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}

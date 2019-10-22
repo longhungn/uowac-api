@@ -23,6 +23,12 @@ import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
 import { DtoPagination } from '../interface/pagination.dto';
 
+/**
+ * Controller class for routes to create, read, update and
+ * delete comments
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Controller('comment')
 @UsePipes(new ValidationPipe({ whitelist: true }))
 export class CommentController {

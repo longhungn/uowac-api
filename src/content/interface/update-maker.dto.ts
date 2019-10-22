@@ -6,7 +6,11 @@ import {
   IsAlpha,
   IsNotEmpty,
 } from 'class-validator';
-
+/**
+ * DTO class for the body of a request to the update maker endpoint
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 export class DtoUpdateMaker {
   @IsNotEmpty()
   @IsString()

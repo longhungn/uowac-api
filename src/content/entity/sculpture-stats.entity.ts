@@ -1,6 +1,11 @@
 import { ViewEntity, ViewColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Sculpture } from './sculpture.entity';
 
+/**
+ * Object relational mapping for the relational view 'SculptureStats'
+ * in the database
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @ViewEntity('SculptureStats', {
   expression: `
     select  "sculpture"."accessionId" AS "sculptureId", 

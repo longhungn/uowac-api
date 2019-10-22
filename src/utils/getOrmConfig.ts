@@ -2,6 +2,11 @@ import { strict as assert } from 'assert';
 require('dotenv').config();
 const ormConfig: any[] = require('../ormconfig');
 
+/**
+ * Load TypeORM config from env variables
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 export function getOrmConfig(env: string = 'development') {
   console.log('Getting orm config for env ' + process.env.NODE_ENV || env);
 

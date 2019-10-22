@@ -1,3 +1,9 @@
+/**
+ * Authentication Module: containing guards (authentication and authorization checks)
+ * and Management API (used by admin to manage users)
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';

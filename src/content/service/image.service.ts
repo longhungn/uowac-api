@@ -5,7 +5,12 @@ import { Sculpture } from '../entity/sculpture.entity';
 import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
 import { IMulterUploadedFile } from '../interface/multer-uploaded-file.interface';
 import { PictureUploader } from './picture-uploader.service';
-
+/**
+ * Service class to handle inserting and removing sculpture
+ * images.
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Injectable()
 export class SculptureImageService {
   private readonly logger = new Logger(SculptureImageService.name);
@@ -17,7 +22,7 @@ export class SculptureImageService {
     uploader.setBucketName(process.env.AWS_S3_PICTURE_BUCKET_NAME);
   }
 
-  //Overload
+  //Overloads
   async insertPicture(
     sculpture: Sculpture,
     pictureFile: IMulterUploadedFile
@@ -28,6 +33,7 @@ export class SculptureImageService {
     pictureFile: IMulterUploadedFile
   ): Promise<SculptureImage>;
 
+  //Implementation
   async insertPicture(
     sculptureIdOrObj: string | Sculpture,
     pictureFile: IMulterUploadedFile
@@ -67,9 +73,10 @@ export class SculptureImageService {
     return await this.manager.save(pic);
   }
 
-  //Overload
+  //Overloads
   async deletePicture(pictureId: string): Promise<SculptureImage>;
   async deletePicture(picture: SculptureImage): Promise<SculptureImage>;
+  //Implementation
   async deletePicture(
     pictureIdOrObj: string | SculptureImage
   ): Promise<SculptureImage> {

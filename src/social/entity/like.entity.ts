@@ -8,7 +8,11 @@ import {
 } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
-
+/**
+ * Object relational mapping for the `like` table in the database
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Entity()
 export class Like {
   @PrimaryGeneratedColumn('uuid')

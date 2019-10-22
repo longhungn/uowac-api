@@ -11,7 +11,11 @@ import { SculptureImage } from './image.entity';
 import { Comment } from '../../social/entity/comment.entity';
 import { Visit } from '../../social/entity/visit.entity';
 import { Like } from '../../social/entity/like.entity';
-
+/**
+ * Object relational mapping for 'sculpture' table in the database
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Entity()
 export class Sculpture {
   @PrimaryColumn()

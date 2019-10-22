@@ -1,3 +1,9 @@
+/**
+ * Script to deploy Auth0 configurations from tenant.yaml to
+ * Auth0 server specified in env variable
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 import { deploy } from 'auth0-deploy-cli';
 import * as path from 'path';
 import { config } from './config';

@@ -1,3 +1,9 @@
+/**
+ * Script to extract Auth0 configurations from
+ * Auth0 server specified in env variable to tenant.yaml
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 import { dump } from 'auth0-deploy-cli';
 import * as path from 'path';
 import { config } from './config';

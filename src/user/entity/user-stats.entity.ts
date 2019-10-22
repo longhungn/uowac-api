@@ -1,5 +1,9 @@
 import { ViewEntity, ViewColumn } from 'typeorm';
-
+/**
+ * Object relational mapping for the `UserStats` view in the database
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @ViewEntity('UserStats', {
   expression: `
     select  "user"."userId" AS "userId", 

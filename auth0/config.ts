@@ -1,3 +1,8 @@
+/**
+ * Script to load Auth0 config from env
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 require('dotenv').config();
 
 const IS_PROD = process.env.NODE_ENV === 'production' ? true : false;

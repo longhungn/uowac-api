@@ -1,3 +1,8 @@
+/**
+ * A wrapper for Auth0 Management API
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 import { Injectable } from '@nestjs/common';
 import { ManagementClient, UpdateUserData } from 'auth0';
 

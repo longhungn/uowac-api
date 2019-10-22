@@ -6,7 +6,12 @@ import {
   IsAlpha,
   IsUrl,
 } from 'class-validator';
-
+/**
+ * DTO class for the body of a request sent to the create sculpture maker
+ * endpoint
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 export class DtoCreateMaker {
   @IsOptional()
   @IsAlphanumeric()

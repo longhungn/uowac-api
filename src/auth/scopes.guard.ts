@@ -1,3 +1,8 @@
+/**
+ *
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 import {
   Injectable,
   CanActivate,
@@ -28,8 +33,8 @@ export class ScopesGuard implements CanActivate {
       return false;
     }
 
-    const userScopes: string[] = userScope.split(' ');
+    const userScopes: string[] = userScope.split(' '); //split scope string to array of scopes
 
-    return userScopes.some(elem => scopes.includes(elem));
+    return userScopes.some(elem => scopes.includes(elem)); //check if array has required scope
   }
 }

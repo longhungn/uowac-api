@@ -1,6 +1,12 @@
 import { PrimaryGeneratedColumn, Column, Entity, OneToMany } from 'typeorm';
 import { Sculpture } from './sculpture.entity';
 
+/**
+ * Object relational mapping for SculptureMaker
+ * Corresponds to 'sculpture_maker' table in database
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Entity()
 export class SculptureMaker {
   @PrimaryGeneratedColumn('uuid')

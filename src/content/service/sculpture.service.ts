@@ -14,6 +14,12 @@ import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
 import { SculptureStats } from '../entity/sculpture-stats.entity';
 import { SculptureImageService } from './image.service';
 
+/**
+ * Service class to handle all the logic for creating, reading,
+ * updating and deleting sculptures
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Injectable()
 export class SculptureService {
   logger = new Logger(SculptureService.name);
@@ -23,6 +29,11 @@ export class SculptureService {
     private readonly imageService: SculptureImageService
   ) {}
 
+  /**
+   * Add like, visit and comment counts to a sculpture
+   * @param sculpture
+   * @returns `Sculpture` object with added `totalLikes`, `totalVisits`, `totalComments`
+   */
   async addStatsToSculpture(sculpture: Sculpture) {
     const stats = await this.manager.findOne(SculptureStats, {
       sculptureId: sculpture.accessionId,
