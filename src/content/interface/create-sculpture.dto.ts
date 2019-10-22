@@ -1,5 +1,10 @@
 import { IsString, IsNotEmpty, IsOptional, IsNumber } from 'class-validator';
 
+/**
+ * DTO class for the body of a request to the create sculpture endpoint
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 export class DtoCreateSculpture {
   @IsString()
   @IsNotEmpty()

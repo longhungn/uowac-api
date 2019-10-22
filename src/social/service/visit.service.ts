@@ -9,7 +9,12 @@ import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 import { DtoCreateVisit } from '../interface/create-visit.dto';
 import { Visit } from '../entity/visit.entity';
-
+/**
+ * Service class to handle logic for creating, reading
+ * and deleting visits
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Injectable()
 export class VisitService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}

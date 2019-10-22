@@ -9,7 +9,12 @@ import { DtoUpdateComment } from '../interface/update-comment.dto';
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
 import { SculptureImage } from '../../content/entity/image.entity';
 import { DtoPagination } from '../interface/pagination.dto';
-
+/**
+ * Service class to handle all logic for creating, reading,
+ * updating and deleting comments
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Injectable()
 export class CommentService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
@@ -84,6 +89,11 @@ export class CommentService {
     return comment;
   }
 
+  /**
+   * Baseline query to get comment and related sculpture, user
+   * To be extended (by adding filter conditions) in other methods
+   * @param pagination
+   */
   async commentQueryBuilder(pagination?: DtoPagination) {
     let query = await this.manager
       .createQueryBuilder(Comment, 'comment')

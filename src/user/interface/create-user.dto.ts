@@ -1,5 +1,9 @@
 import { IsNotEmpty, IsOptional, IsIn, IsString } from 'class-validator';
-
+/**
+ * DTO class for the request body of the create user endpoint
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 export class DtoCreateUser {
   @IsNotEmpty()
   @IsString()

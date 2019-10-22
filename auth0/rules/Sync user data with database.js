@@ -1,3 +1,10 @@
+/**
+ * Auth0 custom rule (webhook) that fires whenever a user logs in.
+ * Synchronize the user's Auth0 profile with
+ * the user profile on the api server by calling an api endpoint
+ *  
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 function (user, context, callback) {
   const request = require('request');
   const jwt = require('jsonwebtoken');
@@ -13,6 +20,7 @@ function (user, context, callback) {
 
   const assignedRoles = (context.authorization || {}).roles;
 
+  // Get access token to call API endpoint
   request.post({
   	url: `https://${context.tenant}.au.auth0.com/oauth/token`,
     json: {
@@ -33,6 +41,11 @@ function (user, context, callback) {
     syncUser(body.access_token, user);
   });
   
+  /**
+   * Update the user data in the API's database with user data retrived from Auth0
+   * @param {*} accessToken 
+   * @param {*} user Auth0 user profile
+   */
   function syncUser(accessToken, user) {
     const provider = user.user_id.split('|')[0];
   	request.post({
@@ -56,7 +69,7 @@ function (user, context, callback) {
     	if (err) return callback(err);
       if (response.statusCode !== 201) {
         console.log(response);
-        return callback(new UnauthorizedError('Service not available'));
+        return callback(new UnauthorizedError('Service not available')); // abort if API server is not online
       }
 
       user.app_metadata = user.app_metadata || {};

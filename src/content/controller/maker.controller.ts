@@ -15,7 +15,12 @@ import { DtoUpdateMaker } from '../interface/update-maker.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
-
+/**
+ * Controller class for routes to create, get, update and delete sculpture
+ * makers
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Controller('maker')
 export class MakerController {
   constructor(private readonly makerService: SculptureMakerService) {}

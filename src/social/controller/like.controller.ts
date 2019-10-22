@@ -15,7 +15,12 @@ import { UserParam } from '../../auth/user.decorator';
 import { AuthUser } from '../../auth/auth-user.interface';
 import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
-
+/**
+ * Controller class for routes to create, read
+ * and delete likes
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Controller('like')
 export class LikeController {
   constructor(private readonly likeService: LikeService) {}

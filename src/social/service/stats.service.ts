@@ -11,7 +11,12 @@ import { Like } from '../entity/like.entity';
 import { User } from '../../user/entity/user.entity';
 import { Sculpture } from '../../content/entity/sculpture.entity';
 const moment = require('moment');
-
+/**
+ * Service class to retrieve statistics (like, comment, visit counts)
+ * for a given date range
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Injectable()
 export class StatsService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}

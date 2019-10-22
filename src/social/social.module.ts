@@ -8,7 +8,12 @@ import { LikeController } from './controller/like.controller';
 import { LikeService } from './service/like.service';
 import { StatsController } from './controller/stats.controller';
 import { StatsService } from './service/stats.service';
-
+/**
+ * Module for social and user engagement features.
+ * Including likes, comments, visits and statistics for each of them
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Module({
   imports: [AuthModule],
   controllers: [

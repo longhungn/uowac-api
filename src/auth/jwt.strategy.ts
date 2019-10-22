@@ -8,6 +8,11 @@ import {
 import { passportJwtSecret } from 'jwks-rsa';
 import { AuthUser } from './auth-user.interface';
 
+/**
+ * Configurations for Passport Jwt Stragegy
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(PassportJwtStrategy) {
   constructor() {

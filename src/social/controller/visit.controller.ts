@@ -16,6 +16,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
 
+/**
+ * Routes for creating, reading, and deleting user visits
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Controller('visit')
 export class VisitController {
   constructor(private readonly visitService: VisitService) {}

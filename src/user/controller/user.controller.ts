@@ -29,7 +29,12 @@ import { IMulterUploadedFile } from '../../content/interface/multer-uploaded-fil
 import { DtoUpdateUser } from '../interface/update-user.dto';
 import { PictureUploader } from '../../content/service/picture-uploader.service';
 import { AuthManagementApi } from '../../auth/auth-management.service';
-
+/**
+ * Routes for getting, creating and updating user profiles in
+ * the application's database
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger(UserController.name);

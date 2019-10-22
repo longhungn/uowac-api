@@ -10,7 +10,12 @@ import { StatsService } from '../service/stats.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
-
+/**
+ * Routes for retrieving analytics about user activities (likes, comments, visits, registration)
+ * within a specified date range
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Controller('stats')
 export class StatsController {
   constructor(private readonly statsService: StatsService) {}

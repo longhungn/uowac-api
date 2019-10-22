@@ -1,5 +1,10 @@
 import { Type } from '@nestjs/common';
 
+/**
+ *
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 export class MockEntityManager {
   find: jest.Mock = jest.fn();
   save: jest.Mock = jest.fn();

@@ -7,11 +7,19 @@ import { UniqueConstraintError } from '../../content/error/unique-constraint.err
 import { EntityDoesNotExistError } from '../../content/error/entity-not-exist.error';
 import { AuthManagementApi } from '../../auth/auth-management.service';
 import { UserStats } from '../entity/user-stats.entity';
-
+/**
+ * Service class handling the logic for creating, updating
+ * and reading user profiles in the application's database
+ *
+ * Created by: Quang Minh Nguyen (qmn1312)
+ */
 @Injectable()
 export class UserService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
+  /**
+   * Enrich user object with visit, like and comment counts
+   */
   async addStatsToUser(user: User) {
     const stats = await this.manager.findOne(UserStats, {
       userId: user.userId,

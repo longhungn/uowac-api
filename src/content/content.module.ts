@@ -7,7 +7,12 @@ import { SculptureImageService } from './service/image.service';
 import { PictureUploader } from './service/picture-uploader.service';
 import { SculptureImageController } from './controller/image.controller';
 import { AuthModule } from '../auth/auth.module';
-
+/**
+ * Module for managing and retrieving information
+ * about the sculptures and sculpture makers
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Module({
   imports: [AuthModule],
   controllers: [SculptureController, MakerController, SculptureImageController],

@@ -16,6 +16,11 @@ import { ScopesGuard } from '../../auth/scopes.guard';
 import { Scopes } from '../../auth/scopes.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
+/**
+ * Controller for routes to create, get, update and delete sculptures
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Controller('sculpture')
 export class SculptureController {
   constructor(private readonly sculptureService: SculptureService) {}

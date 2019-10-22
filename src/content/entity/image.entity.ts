@@ -8,6 +8,12 @@ import {
 } from 'typeorm';
 import { Sculpture } from './sculpture.entity';
 
+/**
+ * Object relational mapping for SculptureImage.
+ * Corresponds to the table 'sculpture_image' in the database
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Entity()
 export class SculptureImage {
   @PrimaryGeneratedColumn('uuid')

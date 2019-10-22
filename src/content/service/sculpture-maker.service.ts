@@ -9,6 +9,12 @@ import { EntityDoesNotExistError } from '../error/entity-not-exist.error';
 import { Sculpture } from '../entity/sculpture.entity';
 import { ForeignKeyError } from '../error/foreign-key.error';
 
+/**
+ * Service class to handle all the logic for creating, updating,
+ * getting and deleting Sculpture Maker
+ *
+ * Created by: Long Hung Nguyen (longhungn)
+ */
 @Injectable()
 export class SculptureMakerService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
