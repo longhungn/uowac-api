@@ -34,7 +34,7 @@
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/typeorm": "^6.1.2",
-    "auth0": "^2.20.0",
+    "auth0": "^2.27.1",
     "auth0-deploy-cli": "^3.6.0",
     "aws-sdk": "^2.524.0",
     "class-transformer": "^0.2.3",
