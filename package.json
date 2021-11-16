@@ -36,7 +36,7 @@
     "@nestjs/typeorm": "^6.1.2",
     "auth0": "^2.20.0",
     "auth0-deploy-cli": "^3.6.0",
-    "aws-sdk": "^2.524.0",
+    "aws-sdk": "^2.814.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.10.1",
     "dotenv": "^8.0.0",
